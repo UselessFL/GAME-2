@@ -1,15 +1,21 @@
 import * as PIXI from "pixi.js";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
-/* 
-PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
+
     const app = new PIXI.Application({background: 'blue', width:1024, height:640});
     document.body.appendChild(app.view);
    
    
     const container = new PIXI.Container();
-    /* container.anchor.set(-1) */
+    container.position = {x: 651, y: 377}
+    
+    // Move container to the center
+    container.x = app.screen.width / 2;
+    container.y = app.screen.height / 2;
     app.stage.addChild(container);
    
+   /*  const backgroundContainer = new PIXI.Container();
+    backgroundContainer.anchor.set(0.5) */
+
     const textu = PIXI.Texture.from('./SpritesTWO/2_01.png')  
    
     const backk = new PIXI.Sprite(textu)
@@ -18,9 +24,7 @@ PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
 
     const toysContainer = new PIXI.Container();
     toysContainer.pivot.set(560, 320)
-    /* toysContainer.x= -300
-    toysContainer.y= -300 */
-    backk.addChild(toysContainer);
+    container.addChild(toysContainer);
    let poryadok = [];
    function rand(i){
     while (poryadok.length < i){
@@ -32,7 +36,6 @@ PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
     console.log(poryadok)
    }
    let toys = []
-   /* let framesData = JSON.parse(ToysFirst) */
    let frameNames = Object.keys(ToysFirst.frames);
    console.log(frameNames)
    function RandomNumberOfToys(i){
@@ -45,9 +48,10 @@ PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
     }
    console.log(`Numbers of toys is: ${toys}`)
    }
-   function ToysOnTheShelf(){
-    let point = 0;
-    if (point < 3){
+   let scene = 1;
+   function Game(){
+    
+    if (scene == 1){
         poryadok.splice(poryadok.length)
         rand(5)
         RandomNumberOfToys(3)
@@ -74,9 +78,11 @@ PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
             }
             drowToys(toys[i], 0.60,place, toysContainer)
         }
-        
+        drowButton('Запомнили?', 0xff0000, container, {x: container.width/2, y:200} )
     }
-    
+    if(scene == 2){
+        console.log('scene 2')
+    }
    }
 
    async function drowToys(spriteNumber, scale, place, father){
@@ -86,24 +92,49 @@ PIXI.Assets.load('./spritesTWO/first.json').then(()=>{ */
         const bunny = new PIXI.Sprite(texture);
         bunny.anchor.set(0.5)
         
-        bunny.position.set(place[0], place[1])
+        /* bunny.position.set(place[0], place[1]) */
+        bunny.x = place[0];
+        bunny.y = place [1]
        
         bunny.scale.set(scale)
         father.addChild(bunny);
     })
     
    }
-   ToysOnTheShelf();
-
-    
-    container.x=app.screen.width/2;
-    container.y=app.screen.height/2;
-    
-    container.pivot.x=container.width/2;
-    container.pivot.y=container.height/2;
-    
+   
+   
+   const containerOneForButton = new PIXI.Container();
+   function drowButton(TextToPut, color, parent, pos){
+    const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
+    bg.width = 200;
+    bg.height = 100;
+    bg.tint = color;
+    bg.anchor.set(0.5)
+    const text = new PIXI.Text(TextToPut, {fill: "#ffffff"});
+    text.anchor.set(0.5);
+     containerOneForButton.x = pos.x
+    containerOneForButton.y = pos.y
+    containerOneForButton.addChild(bg, text)
+    containerOneForButton.eventMode = 'static';
+    containerOneForButton.cursor = 'pointer';
+    containerOneForButton.on('pointerdown', onButtonDownHide)
+    containerOneForButton.on('pointerover', onButtonOver)
+    containerOneForButton.on('pointerout', onButtonOut);
+    parent.addChild(containerOneForButton)
+   }
+    function onButtonDownHide(){
+        toysContainer.visible=false;
+        scene = 2;
+        Game()
+    }
+    function onButtonOver(){
+        containerOneForButton.scale.set(0.97)
+    }
+    function onButtonOut(){
+        containerOneForButton.scale.set(1)
+    }
+   Game();
     app.ticker.add((delta)=>{
-    /* container.rotation -= 0.01 *delta; */
     });
-/* }) */
+
 
