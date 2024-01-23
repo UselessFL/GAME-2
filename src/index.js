@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
 
     const app = new PIXI.Application({background: 'blue', width:1024, height:640});
@@ -65,9 +66,10 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
     placee[1] = 550
     return placee
    }
-
+   const ToyButtonContainer = new PIXI.Container();
+   ToyButtonContainer.pivot.set(560, 320)
+   container.addChild(ToyButtonContainer);
    function Game(){
-    
     if (scene == 1){
         /* poryadok.splice(poryadok.length) */
         rand(5)
@@ -78,16 +80,30 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
         drowButton('Запомнили?', 0xff0000, container, {x: container.width/2, y:200} )
     }
     if(scene == 2){
-        /* console.log('scene 2') */
+        
         containerOneForButton.visible= false;
        const toyToRemove = Math.floor(Math.random()*3)
        console.log(toyToRemove,toys,toys[toyToRemove] )
         toysContainer.removeChildAt(toyToRemove) ; 
-       /*  for (let i =0; i < 3; i++){ drowToys(toys[i+1], 0.60, poryadokAfterButton(i), containerOneForButton) ,console.log(poryadokAfterButton(i))} */
-       for (let i =0; i < 2; i++){ drowToys(toys[i]+1, 0.60,poryadokAfterButton(i), toysContainer)}
-       drowToys(toys[toyToRemove+1], 0.80,poryadokAfterButton(2), toysContainer)
+       
+       
+       for (let i =0; i < 2; i++){ drowToys(toys[i]+1, 0.80, poryadokAfterButton(i), ToyButtonContainer, true)}
+       drowToys(toys[toyToRemove+1], 0.80, poryadokAfterButton(2), ToyButtonContainer,true, true)
+      /*  ToyButtonContainer.children[i].interactive= true;
+       ToyButtonContainer.children[i].on('mouseover', ()=>{
+        ToyButtonContainer.children[i].rotation += 0.5;
+       }) */
+      
     }
    }
+
+async function onToyClickedTrue(){
+console.log('vin')
+}
+async function onToyClickedFalse(){
+console.log('loose')
+}
+
 
    let rows=[]
    rows[0]= 150;
@@ -102,7 +118,38 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
     }
    console.log(rows, columns)
 
-   async function drowToys(spriteNumber, scale, place, father){
+    function interactiveToys(bunny, vin){
+       /*  function rotationOnHower(){
+            let i = 0 
+            app.ticker.add((delta)=>{
+                
+                
+                if (bunny.angle < 40){
+                    
+                    app.ticker.stop();
+                   bunny.angle += 1 * delta
+                   
+                }else{
+                    this.app.ticker.delete();
+                }
+            });
+           
+        } */
+        function rotationOnHower(){
+            gsap.to(bunny, {rotation: -1, duration: 0.25, ease: 'none'})
+        }
+        
+        function stopRotationOnHover() {
+            gsap.to(bunny, {rotation: 0, duration: 0.25, ease: 'none'})
+        }
+         bunny.eventMode = 'static'  
+         bunny.cursor = 'pointer'  
+         vin? bunny.on('pointerdown', onToyClickedTrue) : bunny.on('pointerdown', onToyClickedFalse);
+         bunny.on('pointerover', rotationOnHower)
+         bunny.on('pointerout', stopRotationOnHover)
+    }
+
+   async function drowToys(spriteNumber, scale, place, father, interactive, vin){
     PIXI.Assets.load('../spritesTWO/ToysFirst.json').then(()=>{
         const val = /* `2_${spriteNumber}.png` */ frameNames[spriteNumber]
         const texture = PIXI.Texture.from(val) 
@@ -112,9 +159,12 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
         /* bunny.position.set(place[0], place[1]) */
         bunny.x = place[0];
         bunny.y = place [1]
-       
+        
+        
         bunny.scale.set(scale)
+        
         father.addChild(bunny);
+        interactive? interactiveToys(bunny, vin) : ''
     })
     
    }
@@ -151,7 +201,6 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
         containerOneForButton.scale.set(1)
     }
    Game();
-    app.ticker.add((delta)=>{
-    });
+    
 
 
