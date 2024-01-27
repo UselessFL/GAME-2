@@ -1,17 +1,18 @@
 import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
-
-    const app = new PIXI.Application({background: 'blue', width:1024, height:640});
+import { Assets, Sprite } from 'pixi.js';
+    const app = new PIXI.Application({background: 'blue', width:632, height:478});
     document.body.appendChild(app.view);
    
    
     const container = new PIXI.Container();
-    container.position = {x: 651, y: 377}
+    /* container.position = {x: 651, y: 377} */
     
     // Move container to the center
     container.x = app.screen.width / 2;
     container.y = app.screen.height / 2;
+    container.scale.set(1)
     app.stage.addChild(container);
    
    /*  const backgroundContainer = new PIXI.Container();
@@ -63,7 +64,7 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
    function poryadokAfterButton(i){
     let placee = [];
     placee[0]= i*100 + 450
-    placee[1] = 550
+    placee[1] = 500
     return placee
    }
    const ToyButtonContainer = new PIXI.Container();
@@ -77,7 +78,7 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
         for (let i =0; i < 3; i++){ drowToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
        
         
-        drowButton('Запомнили?', 0xff0000, container, {x: container.width/2, y:200} )
+        drowButton('Запомнили?', 0xff0000, container, {x: container.width/150, y:200} )
     }
     if(scene == 2){
         
@@ -88,7 +89,7 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
        
        
        for (let i =0; i < 2; i++){ drowToys(toys[i]+1, 0.80, poryadokAfterButton(i), ToyButtonContainer, true)}
-       drowToys(toys[toyToRemove+1], 0.80, poryadokAfterButton(2), ToyButtonContainer,true, true)
+       drowToys(toys[toyToRemove], 0.80, poryadokAfterButton(2), ToyButtonContainer,true, true)
       /*  ToyButtonContainer.children[i].interactive= true;
        ToyButtonContainer.children[i].on('mouseover', ()=>{
         ToyButtonContainer.children[i].rotation += 0.5;
@@ -98,10 +99,11 @@ import ToysFirst from '../spritesTWO/ToysFirst.json'
    }
 
 async function onToyClickedTrue(){
-console.log('vin')
+
+drowUtility(12, true)
 }
 async function onToyClickedFalse(){
-console.log('loose')
+    drowUtility(19, false)
 }
 
 
@@ -118,25 +120,10 @@ console.log('loose')
     }
    console.log(rows, columns)
 
-    function interactiveToys(bunny, vin){
-       /*  function rotationOnHower(){
-            let i = 0 
-            app.ticker.add((delta)=>{
-                
-                
-                if (bunny.angle < 40){
-                    
-                    app.ticker.stop();
-                   bunny.angle += 1 * delta
-                   
-                }else{
-                    this.app.ticker.delete();
-                }
-            });
-           
-        } */
+    function interactiveToys(bunny, win){
+       
         function rotationOnHower(){
-            gsap.to(bunny, {rotation: -1, duration: 0.25, ease: 'none'})
+            gsap.to(bunny, {rotation: 1, duration: 0.25, ease: 'none'})
         }
         
         function stopRotationOnHover() {
@@ -144,19 +131,20 @@ console.log('loose')
         }
          bunny.eventMode = 'static'  
          bunny.cursor = 'pointer'  
-         vin? bunny.on('pointerdown', onToyClickedTrue) : bunny.on('pointerdown', onToyClickedFalse);
+         win? bunny.on('pointerdown', onToyClickedTrue) : bunny.on('pointerdown', onToyClickedFalse);
          bunny.on('pointerover', rotationOnHower)
          bunny.on('pointerout', stopRotationOnHover)
     }
-
-   async function drowToys(spriteNumber, scale, place, father, interactive, vin){
-    PIXI.Assets.load('../spritesTWO/ToysFirst.json').then(()=>{
-        const val = /* `2_${spriteNumber}.png` */ frameNames[spriteNumber]
+   await PIXI.Assets.load('../spritesTWO/ToysFirst.json')
+   
+   async function drowToys(spriteNumber, scale, place, father, interactive, win){
+   
+        const val =  frameNames[spriteNumber]
         const texture = PIXI.Texture.from(val) 
         const bunny = new PIXI.Sprite(texture);
         bunny.anchor.set(0.5)
         
-        /* bunny.position.set(place[0], place[1]) */
+       
         bunny.x = place[0];
         bunny.y = place [1]
         
@@ -164,11 +152,77 @@ console.log('loose')
         bunny.scale.set(scale)
         
         father.addChild(bunny);
-        interactive? interactiveToys(bunny, vin) : ''
-    })
+        interactive? interactiveToys(bunny, win) : ''
+    }
+
+    await PIXI.Assets.load('../spritesTWO/ButtonsAndMore.json')
+
+    async function drowUtility(spriteNumber, win){
+    const val = `3_${spriteNumber}.png`
+    const texture = PIXI.Texture.from(val) 
+    const bunny = new PIXI.Sprite(texture);
+    bunny.anchor.set(0.5)
+    /* bunny.x = container.width/14;
+    bunny.y = container.height/2; */
+    bunny.x = app.screen.width/2 - 300
+    bunny.y = app.screen.height/2 - 300
+    console.log(bunny.x, bunny.y)
+    container.addChild(bunny)
+
+    win?
     
-   }
+    gsap.to(bunny, {height:bunny.height+15,width:bunny.width+15 , duration: 0.25, repeat: 4, yoyo:true, onComplete(){bunny.visible = false}})
+    :
+    gsap.to(bunny, {rotation: 0.3, duration: 0.3, repeat: 3,ease: 'circ.inOut',yoyo:true,onComplete(){bunny.visible = false}})
+    /* if(win){
+
+    } *//* else{
+         
+        for(let x=1; x<4; x++){
+            
+            x/2 == 0 ? gsap.to(bunny, {rotation: 0.3, duration: 0.3,yoyo:true})  : gsap.to(bunny, {rotation: -0.3, duration: 0.3,yoyo:true}) 
+        }
+        
+    } */
+    /* else {
+        async function animateBunny() {
+            for(let x = 1; x < 4; x++) {
+                await new Promise(resolve => {
+                    const rotation = x / 2 === 0 ? 0.3 : -0.3;
+                    gsap.to(bunny, {
+                        rotation: rotation,
+                        duration: 0.3,
+                        yoyo: true,
+                        onComplete: resolve
+                    });
+                });
+            }
+        }
+    
+        animateBunny();
+    } */
    
+    }
+    const BackOnTheLeft = Sprite.from(await Assets.load('../spritesTWO/backkdifferent.png'))
+        BackOnTheLeft.anchor.set(1, 0.5);
+        BackOnTheLeft.scale.set(0.5);
+        BackOnTheLeft.x = -BackOnTheLeft.width/2 -21
+        container.addChild(BackOnTheLeft);
+        console.log(BackOnTheLeft.width, BackOnTheLeft.height);
+
+    async function animationOnEnteringTheScene(){
+        /* container.x += BackOnTheLeft.width-315 */
+        container.x += 700
+        
+        setTimeout(() => {
+            gsap.to(container,{x: 315, duration: 3, ease: "power2.out"})
+        }, 1000);
+        
+    }
+
+
+
+  
    
    const containerOneForButton = new PIXI.Container();
    function drowButton(TextToPut, color, parent, pos){
@@ -201,6 +255,7 @@ console.log('loose')
         containerOneForButton.scale.set(1)
     }
    Game();
+   animationOnEnteringTheScene();
     
 
 
