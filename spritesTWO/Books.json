@@ -1,0 +1,79 @@
+{"frames": {
+
+"2_14.png":
+{
+	"frame": {"x":1,"y":1,"w":56,"h":61},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":61},
+	"sourceSize": {"w":56,"h":61}
+},
+"2_15.png":
+{
+	"frame": {"x":107,"y":1,"w":29,"h":49},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":29,"h":49},
+	"sourceSize": {"w":29,"h":49}
+},
+"2_16.png":
+{
+	"frame": {"x":138,"y":1,"w":28,"h":17},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":17},
+	"sourceSize": {"w":28,"h":17}
+},
+"2_35.png":
+{
+	"frame": {"x":59,"y":1,"w":61,"h":46},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":61,"h":46},
+	"sourceSize": {"w":61,"h":46}
+},
+"2_38.png":
+{
+	"frame": {"x":1,"y":1,"w":56,"h":61},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":56,"h":61},
+	"sourceSize": {"w":56,"h":61}
+},
+"2_83.png":
+{
+	"frame": {"x":59,"y":1,"w":61,"h":46},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":61,"h":46},
+	"sourceSize": {"w":61,"h":46}
+},
+"2_93.png":
+{
+	"frame": {"x":107,"y":1,"w":29,"h":49},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":29,"h":49},
+	"sourceSize": {"w":29,"h":49}
+},
+"2_94.png":
+{
+	"frame": {"x":138,"y":1,"w":28,"h":17},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":17},
+	"sourceSize": {"w":28,"h":17}
+}},
+"animations": {
+	"2": ["2_14.png","2_15.png","2_16.png","2_35.png","2_38.png","2_83.png","2_93.png","2_94.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.1",
+	"image": "Books.png",
+	"format": "RGBA8888",
+	"size": {"w":156,"h":63},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:06ab1830f7e2f302f59c3d72ad4659d4:0bac6eb4fad6ab713ab560e1398f25d6:cd51832c1c1f185a42b4546046031e4c$"
+}
+}

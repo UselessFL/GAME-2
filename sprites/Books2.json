@@ -1,0 +1,10 @@
+<TextureAtlas imagePath="Books2.png">
+	<SubTexture name="2_14.png" x="0" y="48" width="56" height="61"/>
+	<SubTexture name="2_15.png" x="58" y="48" width="29" height="49"/>
+	<SubTexture name="2_16.png" x="58" y="99" width="28" height="17"/>
+	<SubTexture name="2_35.png" x="0" y="0" width="61" height="46"/>
+	<SubTexture name="2_38.png" x="0" y="48" width="56" height="61"/>
+	<SubTexture name="2_83.png" x="0" y="0" width="61" height="46"/>
+	<SubTexture name="2_93.png" x="58" y="48" width="29" height="49"/>
+	<SubTexture name="2_94.png" x="58" y="99" width="28" height="17"/>
+</TextureAtlas>

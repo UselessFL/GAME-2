@@ -2,28 +2,20 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
 import { Assets, Sprite } from 'pixi.js';
+
+
     const app = new PIXI.Application({background: 'blue', width:632, height:478});
     document.body.appendChild(app.view);
-   
-   
     const container = new PIXI.Container();
-    /* container.position = {x: 651, y: 377} */
-    
     // Move container to the center
     container.x = app.screen.width / 2;
     container.y = app.screen.height / 2;
-    container.scale.set(1)
+    container.scale.set(0.8)
     app.stage.addChild(container);
-   
-   /*  const backgroundContainer = new PIXI.Container();
-    backgroundContainer.anchor.set(0.5) */
-
     const textu = PIXI.Texture.from('./SpritesTWO/2_01.png')  
-   
     const backk = new PIXI.Sprite(textu)
     backk.anchor.set(0.5)
     container.addChild(backk)
-
     const toysContainer = new PIXI.Container();
     toysContainer.pivot.set(560, 320)
     container.addChild(toysContainer);
@@ -76,7 +68,7 @@ import { Assets, Sprite } from 'pixi.js';
         rand(5)
         RandomNumberOfToys(3)
         for (let i =0; i < 3; i++){ drowToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
-       
+        drowBooks()
         
         drowButton('Запомнили?', 0xff0000, container, {x: container.width/150, y:200} )
     }
@@ -99,7 +91,6 @@ import { Assets, Sprite } from 'pixi.js';
    }
 
 async function onToyClickedTrue(){
-
 drowUtility(12, true)
 }
 async function onToyClickedFalse(){
@@ -114,8 +105,8 @@ async function onToyClickedFalse(){
    /* position[1[1]] =  */
     for(let i = 1; i<5;i++){
         for(let j = 1; j <6; j++){
-            columns[i]=columns[i-1]+50
-            rows[j]=rows[j-1]+50
+            columns[i]=columns[i-1]+55
+            rows[j]=rows[j-1]+53
         }
     }
    console.log(rows, columns)
@@ -145,8 +136,8 @@ async function onToyClickedFalse(){
         bunny.anchor.set(0.5)
         
        
-        bunny.x = place[0];
-        bunny.y = place [1]
+        bunny.x = place[0]+20;
+        bunny.y = place [1]-18
         
         
         bunny.scale.set(scale)
@@ -173,34 +164,10 @@ async function onToyClickedFalse(){
     
     gsap.to(bunny, {height:bunny.height+15,width:bunny.width+15 , duration: 0.25, repeat: 4, yoyo:true, onComplete(){bunny.visible = false}})
     :
-    gsap.to(bunny, {rotation: 0.3, duration: 0.3, repeat: 3,ease: 'circ.inOut',yoyo:true,onComplete(){bunny.visible = false}})
-    /* if(win){
 
-    } *//* else{
-         
-        for(let x=1; x<4; x++){
-            
-            x/2 == 0 ? gsap.to(bunny, {rotation: 0.3, duration: 0.3,yoyo:true})  : gsap.to(bunny, {rotation: -0.3, duration: 0.3,yoyo:true}) 
-        }
-        
-    } */
-    /* else {
-        async function animateBunny() {
-            for(let x = 1; x < 4; x++) {
-                await new Promise(resolve => {
-                    const rotation = x / 2 === 0 ? 0.3 : -0.3;
-                    gsap.to(bunny, {
-                        rotation: rotation,
-                        duration: 0.3,
-                        yoyo: true,
-                        onComplete: resolve
-                    });
-                });
-            }
-        }
-    
-        animateBunny();
-    } */
+    gsap.to(bunny, {rotation: -0.1, duration: 0.1,ease: 'circ.inOut', onComplete(){
+        gsap.to(bunny, {rotation: 0.2, duration: 0.1, repeat: 5,ease: 'circ.inOut',yoyo:true,onComplete(){bunny.visible = false}})
+    }})
    
     }
     const BackOnTheLeft = Sprite.from(await Assets.load('../spritesTWO/backkdifferent.png'))
@@ -212,18 +179,13 @@ async function onToyClickedFalse(){
 
     async function animationOnEnteringTheScene(){
         /* container.x += BackOnTheLeft.width-315 */
-        container.x += 700
+        container.x += 500
         
         setTimeout(() => {
-            gsap.to(container,{x: 315, duration: 3, ease: "power2.out"})
+            gsap.to(container,{x: 315, duration: 3, ease: "power2.out", onComplete:Game})
         }, 1000);
         
     }
-
-
-
-  
-   
    const containerOneForButton = new PIXI.Container();
    function drowButton(TextToPut, color, parent, pos){
     const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
@@ -254,8 +216,43 @@ async function onToyClickedFalse(){
     function onButtonOut(){
         containerOneForButton.scale.set(1)
     }
-   Game();
+    await PIXI.Assets.load('../spritesTWO/Books.json')
+    async function drowBooks(){
+        const val1 = "2_14.png"
+        const val2 = "2_15.png"
+        poryadok.length = poryadok.length-2
+        console.log(`poryadok after trim ${poryadok}`)
+        let randbook;
+        for (let i =1; i<7;i++){
+            for(let j = 1; j<6; j++){
+                randbook=Math.floor(Math.random()+1)
+                console.log(randbook)
+                let val =1;
+                if(randbook==1){
+                     val = val1
+                }if(randbook==2){
+                     val= val2
+                }
+                const texture = PIXI.Texture.from(val) 
+                const bunny = new PIXI.Sprite(texture);   
+                bunny.anchor.set(0.5)
+                
+                if(poryadok.includes(j) & i == 3){
+                    continue
+                }else{
+                    bunny.x = columns[j-1]-540
+                    bunny.y = rows[i-1]-340
+                    bunny.scale.set(0.7)
+                    bunny.tint = 0xFF55FF
+                    
+                    container.addChild(bunny)
+                }
+                
+            }
+        }
+    }
+   /* Game(); */
    animationOnEnteringTheScene();
-    
+   
 
 
