@@ -2,10 +2,14 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
 import { Assets, Sprite } from 'pixi.js';
+import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
+    await PIXI.Assets.load('../spritesTWO/ToysFirst.json')
+    await PIXI.Assets.load('../spritesTWO/ButtonsAndMore.json')
+    await PIXI.Assets.load('../spritesTWO/Books.json')
 
-    const app = new PIXI.Application({background: 'blue', width:632, height:478});
-    document.body.appendChild(app.view);
+    const app = new PIXI.Application({background: 'blue', width:632, height:478, view: document.getElementById('MyCanvas')});
+    /* document.body.appendChild(app.view); */
     const container = new PIXI.Container();
     // Move container to the center
     container.x = app.screen.width / 2;
@@ -56,7 +60,7 @@ import { Assets, Sprite } from 'pixi.js';
    function poryadokAfterButton(i){
     let placee = [];
     placee[0]= i*100 + 450
-    placee[1] = 500
+    placee[1] = 550
     return placee
    }
    const ToyButtonContainer = new PIXI.Container();
@@ -70,7 +74,7 @@ import { Assets, Sprite } from 'pixi.js';
         for (let i =0; i < 3; i++){ drowToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
         drowBooks()
         
-        drowButton('Запомнили?', 0xff0000, container, {x: container.width/150, y:200} )
+        drowButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
     }
     if(scene == 2){
         
@@ -80,8 +84,8 @@ import { Assets, Sprite } from 'pixi.js';
         toysContainer.removeChildAt(toyToRemove) ; 
        
        
-       for (let i =0; i < 2; i++){ drowToys(toys[i]+1, 0.80, poryadokAfterButton(i), ToyButtonContainer, true)}
-       drowToys(toys[toyToRemove], 0.80, poryadokAfterButton(2), ToyButtonContainer,true, true)
+       for (let i =0; i < 2; i++){ drowToys(toys[i]+1, 1.00, poryadokAfterButton(i), ToyButtonContainer, true)}
+       drowToys(toys[toyToRemove], 1.00, poryadokAfterButton(2), ToyButtonContainer,true, true)
       /*  ToyButtonContainer.children[i].interactive= true;
        ToyButtonContainer.children[i].on('mouseover', ()=>{
         ToyButtonContainer.children[i].rotation += 0.5;
@@ -126,7 +130,6 @@ async function onToyClickedFalse(){
          bunny.on('pointerover', rotationOnHower)
          bunny.on('pointerout', stopRotationOnHover)
     }
-   await PIXI.Assets.load('../spritesTWO/ToysFirst.json')
    
    async function drowToys(spriteNumber, scale, place, father, interactive, win){
    
@@ -144,9 +147,10 @@ async function onToyClickedFalse(){
         
         father.addChild(bunny);
         interactive? interactiveToys(bunny, win) : ''
+        interactive? bunny.filters = [new DropShadowFilter()] : ''
     }
-
-    await PIXI.Assets.load('../spritesTWO/ButtonsAndMore.json')
+    
+    
 
     async function drowUtility(spriteNumber, win){
     const val = `3_${spriteNumber}.png`
@@ -182,18 +186,18 @@ async function onToyClickedFalse(){
         container.x += 500
         
         setTimeout(() => {
-            gsap.to(container,{x: 315, duration: 3, ease: "power2.out", onComplete:Game})
+            gsap.to(container,{x: 315, duration: 3, ease: "power2.out"/* , onComplete:Game */})
         }, 1000);
         
     }
    const containerOneForButton = new PIXI.Container();
    function drowButton(TextToPut, color, parent, pos){
     const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
-    bg.width = 200;
-    bg.height = 100;
+    bg.width = 180;
+    bg.height = 50;
     bg.tint = color;
     bg.anchor.set(0.5)
-    const text = new PIXI.Text(TextToPut, {fill: "#ffffff"});
+    const text = new PIXI.Text(TextToPut, {fill: "black", alpha: 0.5});
     text.anchor.set(0.5);
      containerOneForButton.x = pos.x
     containerOneForButton.y = pos.y
@@ -216,28 +220,32 @@ async function onToyClickedFalse(){
     function onButtonOut(){
         containerOneForButton.scale.set(1)
     }
-    await PIXI.Assets.load('../spritesTWO/Books.json')
+    
     async function drowBooks(){
         const val1 = "2_14.png"
-        const val2 = "2_15.png"
+        const val2 = "2_35.png"
         poryadok.length = poryadok.length-2
         console.log(`poryadok after trim ${poryadok}`)
         let randbook;
+        let val
         for (let i =1; i<7;i++){
+            
             for(let j = 1; j<6; j++){
-                randbook=Math.floor(Math.random()+1)
+                
+                /* randbook=Math.floor(Math.random()+1)
                 console.log(randbook)
                 let val =1;
                 if(randbook==1){
                      val = val1
                 }if(randbook==2){
                      val= val2
-                }
+                } */
+                i/2 == 0  ? val = val1: val=val2
                 const texture = PIXI.Texture.from(val) 
                 const bunny = new PIXI.Sprite(texture);   
                 bunny.anchor.set(0.5)
                 
-                if(poryadok.includes(j) & i == 3){
+                if(/* poryadok.includes(j) & */ i == 3){
                     continue
                 }else{
                     bunny.x = columns[j-1]-540
@@ -251,7 +259,7 @@ async function onToyClickedFalse(){
             }
         }
     }
-   /* Game(); */
+   Game();
    animationOnEnteringTheScene();
    
 
