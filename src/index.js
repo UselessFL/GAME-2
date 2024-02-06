@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
 import BallsImport from '../spritesTWO/balls/Balls.json'
+import ButtonAndMoreImport from '../spritesTWO/ButtonsAndMore.json'
 import { Assets, Sprite } from 'pixi.js';
 import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
@@ -69,23 +70,33 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    const ToyButtonContainer = new PIXI.Container();
    ToyButtonContainer.pivot.set(560, 320)
    container.addChild(ToyButtonContainer);
+   const containerOneForButton = new PIXI.Container();
+   drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
    function Game(){
     if (scene == 1){
+        poryadok.length=0
+        toys.length=0
+        
+        for(let x =0; x<3; x++){
+            while(toysContainer.children[x]){toysContainer.removeChild(toysContainer.children[x])}}
+    
+        for(let x =0; x<3; x++){
+            while(ToyButtonContainer.children[x]){ToyButtonContainer.removeChild(ToyButtonContainer.children[x])}}
+    
         rand(5)
         RandomNumberOfToys(6)
         for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
-        drawBooks()
+        /* 
+        containerOneForButton.visible= true; */
         
-        drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
     }
     if(scene == 2){
         
         containerOneForButton.visible= false;
-        const toyToRemove = Math.floor(Math.random()*3)
+        let toyToRemove = Math.floor(Math.random()*3)
         console.log(toyToRemove,toys,toys[toyToRemove] )
         toysContainer.removeChildAt(toyToRemove) ; 
-       
-       const randomOfthree = Math.floor(Math.random()*3)
+       let randomOfthree = Math.floor(Math.random()*3)
        console.log(`random number of the toy is ${randomOfthree}`)
        for (let i =0; i < 3; i++){ 
         if (i== randomOfthree){continue}
@@ -98,9 +109,27 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
 async function onToyClickedTrue(){
 drawUtility(12, true)
+setTimeout(() => {
+    
+AnimationOnButtonDown(scene)
+}, 1200);
+setTimeout(() => {
+    scene = 1;
+    Game()
+    
+}, 1200);
 }
 async function onToyClickedFalse(){
     drawUtility(19, false)
+    setTimeout(() => {
+    
+        AnimationOnButtonDown(scene)
+        }, 1200);
+setTimeout(() => {
+    
+scene = 1;
+Game()
+}, 1200);
 }
 
 
@@ -191,7 +220,7 @@ async function onToyClickedFalse(){
         }, 1000);
         
     }
-   const containerOneForButton = new PIXI.Container();
+   
    function drawButton(TextToPut, color, parent, pos){
     const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
     bg.width = 180;
@@ -294,16 +323,23 @@ async function onToyClickedFalse(){
             }
         }
     }
-    function AnimationOnButtonDown(){
+    function AnimationOnButtonDown(scene){
         backk.tint = 0x999999
         BackOnTheLeft.tint = 0x999999
         toysContainer.visible = false
         ToyButtonContainer.visible = false
+        
+        containerOneForButton.visible= false;
+        
         setTimeout(() => {
             backk.tint = 0xFFFFFF
             BackOnTheLeft.tint = 0xFFFFFF
         toysContainer.visible = true
         ToyButtonContainer.visible = true
+        
+        scene?containerOneForButton.visible= true:''
+        
+        
         }, 1500);
     }
     const ContainerForBackgroundStuff = new PIXI.Container();
@@ -342,15 +378,12 @@ const containerForNumbers = new PIXI.Container();
     containerForNumbers.y = container.height / 2;
     container.addChild(containerForNumbers);
 async function drawNumbers(){
-
-    
-
-    const number1 = new PIXI.Sprite(PIXI.Texture.from('3_25.png'))
-    const number2 = new PIXI.Sprite(PIXI.Texture.from('3_26.png'))
-    const number3 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
+    const number1 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
+    const number2 = new PIXI.Sprite(PIXI.Texture.from('3_17.png'))
+    const number3 = new PIXI.Sprite(PIXI.Texture.from('3_18.png'))
     const mas = [number1,number2,number3]
 
-for(let x = 0; x<3;x++)
+/* for(let x = 0; x<3;x++)
 {
     
     setTimeout(() => {
@@ -364,7 +397,30 @@ for(let x = 0; x<3;x++)
         container.removeChild(mas[x]);
     }, 10000*x+1);
 }
+ */
 
+for(let x =0; x<3; x++){
+    let a = mas[x]
+    a.x = -100 + x * 100
+    a.y = 0
+    container.addChild(a)
+}
+/* let z = 0;
+let NumbersToDraw = Object.keys(ButtonAndMoreImport.frames);
+for(let x =14; x<NumbersToDraw.length-14; x++){
+let a = new PIXI.Sprite(PIXI.Texture.from(NumbersToDraw[x])) 
+
+a.x = -300 +x *30
+x%10 == 0? z+=100: ''
+a.y = 0+z   
+container.addChild(a)
+a.on('pointerdown', onoverNumb,x)
+
+}
+function onoverNumb(a){
+    console.log(a)
+}
+console.log(NumbersToDraw) */
 setTimeout(() => {
     
 }, 3000);
@@ -372,9 +428,10 @@ setTimeout(() => {
 }
    
    Game();
+   drawBooks()
    animationOnEnteringTheScene();
    /* drawBalls(); */
-   drawNumbers()
+  /*  drawNumbers() */
    
    
 
