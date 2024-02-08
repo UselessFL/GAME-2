@@ -214,10 +214,12 @@ Game()
     async function animationOnEnteringTheScene(){
         /* container.x += BackOnTheLeft.width-315 */
         container.x += 500
-        
+        drawNumbers()
+        AnimationOnButtonDown('',2400)
         setTimeout(() => {
             gsap.to(container,{x: 315, duration: 3, ease: "power2.out"/* , onComplete:Game */})
-        }, 1000);
+            containerOneForButton.visible = true;
+        }, 3900);
         
     }
    
@@ -323,7 +325,7 @@ Game()
             }
         }
     }
-    function AnimationOnButtonDown(scene){
+    function AnimationOnButtonDown(scene, time){
         backk.tint = 0x999999
         BackOnTheLeft.tint = 0x999999
         toysContainer.visible = false
@@ -340,7 +342,7 @@ Game()
         scene?containerOneForButton.visible= true:''
         
         
-        }, 1500);
+        }, time?1500 + time: 1200);
     }
     const ContainerForBackgroundStuff = new PIXI.Container();
     ContainerForBackgroundStuff.x = app.screen.width / 2;
@@ -359,12 +361,10 @@ Game()
     /* const loader = PIXI.Loader.shared; */
     /* loader.add('') */
    /*  PIXI.loader.add('') */
-   await  PIXI.Assets.load('../spritesTWO/balls/Balls.json')
-   async function drawBalls(){
-       
-        
+   await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
+   const atlasData = BallsImport;
+   /* async function drawBalls(){        
         let frames = Object.keys(BallsImport.frames);
-        
         const anim = new PIXI.AnimatedSprite(frames);
         anim.x = 0
         anim.y = 0
@@ -376,51 +376,55 @@ Game()
 const containerForNumbers = new PIXI.Container();
     containerForNumbers.x = container.width / 2;
     containerForNumbers.y = container.height / 2;
-    container.addChild(containerForNumbers);
+    container.addChild(containerForNumbers); */
+    async function drawBalls(){/* 
+        const spriteSheet = new PIXI.Spritesheet(PIXI.BaseTexture.from(atlasData.meta.image),
+        atlasData)
+        await spriteSheet.parse();
+        const anim = new PIXI.AnimatedSprite(spriteSheet.animations)
+        anim.animationSpeed = 0.16
+        anim.play();
+        anim.x = 0
+        anim.y = 0
+        container.addChild(anim) */
+        
+    let frameNames = Object.keys(BallsImport.frames);
+    let cadrs = []
+    for(let x = 0; x < frameNames.length;x++){
+        cadrs.push(PIXI.Texture.from(frameNames[x]))
+    }   
+    const anim = new PIXI.AnimatedSprite(cadrs)
+    anim.animationSpeed = 0.1
+    anim.play();
+    anim.x = 110
+    anim.y = -260
+    container.addChild(anim) 
+   
+    }
+    drawBalls();    
 async function drawNumbers(){
     const number1 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
     const number2 = new PIXI.Sprite(PIXI.Texture.from('3_17.png'))
     const number3 = new PIXI.Sprite(PIXI.Texture.from('3_18.png'))
     const mas = [number1,number2,number3]
 
-/* for(let x = 0; x<3;x++)
+for(let x = 0; x<3;x++)
 {
     
     setTimeout(() => {
         let a = mas[x]
-    a.x = 0+x*100
+    a.x = 0-BackOnTheLeft.width
     a.y = 0
+    a.scale.set(2)
         container.addChild(a)
-    }, 5000*x);
+        console.log(`number ${x} has added`)
+    }, 1300*x);
     setTimeout(() => {
        
         container.removeChild(mas[x]);
-    }, 10000*x+1);
+    }, 1300*x+1300);
 }
- */
 
-for(let x =0; x<3; x++){
-    let a = mas[x]
-    a.x = -100 + x * 100
-    a.y = 0
-    container.addChild(a)
-}
-/* let z = 0;
-let NumbersToDraw = Object.keys(ButtonAndMoreImport.frames);
-for(let x =14; x<NumbersToDraw.length-14; x++){
-let a = new PIXI.Sprite(PIXI.Texture.from(NumbersToDraw[x])) 
-
-a.x = -300 +x *30
-x%10 == 0? z+=100: ''
-a.y = 0+z   
-container.addChild(a)
-a.on('pointerdown', onoverNumb,x)
-
-}
-function onoverNumb(a){
-    console.log(a)
-}
-console.log(NumbersToDraw) */
 setTimeout(() => {
     
 }, 3000);
@@ -431,7 +435,7 @@ setTimeout(() => {
    drawBooks()
    animationOnEnteringTheScene();
    /* drawBalls(); */
-  /*  drawNumbers() */
+   
    
    
 
