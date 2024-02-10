@@ -55,6 +55,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    }
 
    let scene = 1;
+   let points = 0;
    function poryadokOfTheToysOnTheShelf(i){     
         let place = [];
         place[0] = columns[i-1]
@@ -72,6 +73,9 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    container.addChild(ToyButtonContainer);
    const containerOneForButton = new PIXI.Container();
    drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
+
+   let removableToy;
+
    function Game(){
     if (scene == 1){
         poryadok.length=0
@@ -95,7 +99,9 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         containerOneForButton.visible= false;
         let toyToRemove = Math.floor(Math.random()*3)
         console.log(toyToRemove,toys,toys[toyToRemove] )
-        toysContainer.removeChildAt(toyToRemove) ; 
+ /*        toysContainer.removeChildAt(toyToRemove) ;  */
+        toysContainer.getChildAt(toyToRemove).visible=false ; 
+        removableToy = toyToRemove;
        let randomOfthree = Math.floor(Math.random()*3)
        console.log(`random number of the toy is ${randomOfthree}`)
        for (let i =0; i < 3; i++){ 
@@ -109,6 +115,8 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
 async function onToyClickedTrue(){
 drawUtility(12, true)
+toysContainer.getChildAt(removableToy).visible=true ;
+points += 100;
 setTimeout(() => {
     
 AnimationOnButtonDown(scene)
@@ -425,12 +433,59 @@ for(let x = 0; x<3;x++)
     }, 1300*x+1300);
 }
 
-setTimeout(() => {
-    
-}, 3000);
 
 }
-   
+const UIcontainer = new PIXI.Container();
+   /*  UIcontainer.pivot.set(560, 320) */
+   UIcontainer.anchor = 0.5
+   UIcontainer.zIndex = -1
+    container.addChild(UIcontainer);
+function drawUI(TextToPut,XX,width,gap){
+    const UI = new PIXI.Sprite(PIXI.Texture.WHITE)
+    UI.width=width;
+    UI.height=30;
+    UI.tint = 0xc9ccd1;
+    UI.alpha=0.5
+    UI.x = 600-(width+XX)-gap;
+    UI.y = -270
+    const text = new PIXI.Text(TextToPut, {fill: 0xf5f7fa, alpha: 0.5, align: "left",fontSize:16, fontFamily:'roboto'});
+    UI.anchor.set(1)
+    UIcontainer.addChild(UI,text)
+    text.anchor.set(0.5)
+    text.x = UI.x-UI.width/2;
+    text.y = UI.y-UI.height/2;
+    if(TextToPut ==0){
+        text.x = UI.x - 10
+    }
+    if(TextToPut <0 || TextToPut>60){
+        TextToPut = 0 
+    }
+    
+    
+}  
+function DrawUINumber(TextToPut, xMove, YMove){
+    const text = new PIXI.Text(TextToPut, {fill: 0xf5f7fa, alpha: 0.5});
+    
+
+    text.x = 400;
+    text.y = -250;
+    text.x -= xMove;
+    text.y -= YMove;
+    text.anchor.set(1)
+    UIcontainer.addChild(text)
+} 
+setTimeout(() => {
+    const now = new Date()
+app.ticker.add(()=>{
+    let NewNow = new Date();
+    drawUI(points,100, 70,40);
+    drawUI('',170, 70,43);
+    drawUI('1-10',240, 70,46);
+    drawUI(`0:${Math.floor(60+(now.getSeconds()-NewNow.getSeconds()))}`,310, 70,49);
+})
+}, 4900);
+
+ 
    Game();
    drawBooks()
    animationOnEnteringTheScene();
