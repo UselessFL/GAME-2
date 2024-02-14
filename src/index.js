@@ -108,6 +108,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    }
 
 async function onToyClickedTrue(){
+    /* container.visible=false; */
 drawUtility(12, true)
 setTimeout(() => {
     
@@ -120,6 +121,7 @@ setTimeout(() => {
 }, 1200);
 }
 async function onToyClickedFalse(){
+    /* container.visible=false; */
     drawUtility(19, false)
     setTimeout(() => {
     
