@@ -75,7 +75,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
 
    let removableToy;
-
+   
    function Game(){
     if (scene == 1){
         poryadok.length=0
@@ -111,6 +111,34 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
        drawToys(toys[toyToRemove], 1.00, poryadokAfterButton(randomOfthree), ToyButtonContainer,true, true)
    
     }
+    if(scene ==3){
+        let  TextToPutOnTheEndScreen = `Congratulations!\nYour score is:${points}`
+        const EndScreen = new PIXI.Container();
+        // Move EndScreen to the center
+        EndScreen.x = app.screen.width / 2;
+        EndScreen.y = app.screen.height / 2;
+        EndScreen.scale.set(0.8)
+        app.stage.addChild(EndScreen)
+        container.visible = false
+        
+        
+
+    const EndBg = new PIXI.Sprite(PIXI.Texture.WHITE)
+    EndBg.width = app.stage.width;
+    EndBg.height = app.stage.height;
+    /* EndBg.x= EndScreen.width/2
+    EndBg.y = EndScreen.height/2 */
+    EndBg.x = 0
+    EndBg.y = 0;
+    EndBg.tint = 0xffffff;
+    EndBg.anchor.set(0.5)
+    EndScreen.addChild(EndBg)
+    const textOnEndScreen = new PIXI.Text(TextToPutOnTheEndScreen, {fill: 0x00000, alpha: 0.5});
+    textOnEndScreen.anchor.set(0.5);
+     textOnEndScreen.x = EndScreen.width/2
+    textOnEndScreen.y = EndScreen.height/2
+    EndScreen.addChild(textOnEndScreen)
+    }
    }
 
 async function onToyClickedTrue(){
@@ -120,24 +148,30 @@ points += 100;
 setTimeout(() => {
     
 AnimationOnButtonDown(scene)
+
 }, 1200);
 setTimeout(() => {
+    endOfthegame(end)
     scene = 1;
     Game()
     
 }, 1200);
+
 }
 async function onToyClickedFalse(){
     drawUtility(19, false)
     setTimeout(() => {
     
         AnimationOnButtonDown(scene)
-        }, 1200);
+        
+        }, 1200)
+        
 setTimeout(() => {
-    
+    endOfthegame(end)
 scene = 1;
 Game()
 }, 1200);
+
 }
 
 
@@ -356,46 +390,13 @@ Game()
     ContainerForBackgroundStuff.x = app.screen.width / 2;
     ContainerForBackgroundStuff.y = app.screen.height / 2;
     container.addChild(ContainerForBackgroundStuff);
-/*     function drawBalls(){
-        img = new PIXI.AnimatedSprite(balls.animation['image_se'])
-        img.anchor(0.5)
-        img.x = 0
-        img.y = 0
-        ContainerForBackgroundStuff.addChild(img)
 
-        img.play()
-        app.ticker.add(animate)
-    } */
-    /* const loader = PIXI.Loader.shared; */
-    /* loader.add('') */
-   /*  PIXI.loader.add('') */
    await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
-   const atlasData = BallsImport;
-   /* async function drawBalls(){        
-        let frames = Object.keys(BallsImport.frames);
-        const anim = new PIXI.AnimatedSprite(frames);
-        anim.x = 0
-        anim.y = 0
-        anim.anchor.set(0.5);
-        anim.animationSpeed = 0.5;
-        anim.play();
-        ContainerForBackgroundStuff.addChild(anim);
-}
-const containerForNumbers = new PIXI.Container();
-    containerForNumbers.x = container.width / 2;
-    containerForNumbers.y = container.height / 2;
-    container.addChild(containerForNumbers); */
-    async function drawBalls(){/* 
-        const spriteSheet = new PIXI.Spritesheet(PIXI.BaseTexture.from(atlasData.meta.image),
-        atlasData)
-        await spriteSheet.parse();
-        const anim = new PIXI.AnimatedSprite(spriteSheet.animations)
-        anim.animationSpeed = 0.16
-        anim.play();
-        anim.x = 0
-        anim.y = 0
-        container.addChild(anim) */
-        
+   
+    async function drawBalls(){    
+    const containerForBalls = new PIXI.Container();
+    containerForBalls.anchor = (0.5)   
+    container.addChild(containerForBalls)  
     let frameNames = Object.keys(BallsImport.frames);
     let cadrs = []
     for(let x = 0; x < frameNames.length;x++){
@@ -406,11 +407,13 @@ const containerForNumbers = new PIXI.Container();
     anim.play();
     anim.x = 110
     anim.y = -260
-    container.addChild(anim) 
-   
+    containerForBalls.addChild(anim) 
     }
+
     drawBalls();    
-async function drawNumbers(){
+
+
+    async function drawNumbers(){
     const number1 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
     const number2 = new PIXI.Sprite(PIXI.Texture.from('3_17.png'))
     const number3 = new PIXI.Sprite(PIXI.Texture.from('3_18.png'))
@@ -454,12 +457,12 @@ function drawUI(TextToPut,XX,width,gap){
     text.anchor.set(0.5)
     text.x = UI.x-UI.width/2;
     text.y = UI.y-UI.height/2;
-    if(TextToPut ==0){
+    /* if(TextToPut ==0){
         text.x = UI.x - 10
     }
     if(TextToPut <0 || TextToPut>60){
         TextToPut = 0 
-    }
+    } */
     
     
 }  
@@ -474,24 +477,62 @@ function DrawUINumber(TextToPut, xMove, YMove){
     text.anchor.set(1)
     UIcontainer.addChild(text)
 } 
+
+let end = false;
 setTimeout(() => {
     const now = new Date()
-app.ticker.add(()=>{
+/* app.ticker.add(()=>{
     let NewNow = new Date();
+    
     drawUI(points,100, 70,40);
     drawUI('',170, 70,43);
     drawUI('1-10',240, 70,46);
     drawUI(`0:${Math.floor(60+(now.getSeconds()-NewNow.getSeconds()))}`,310, 70,49);
-})
-}, 4900);
 
+}) */
+
+let timeValue = 60;
+
+let timeInterval = setInterval(() => {
+    timeValue--
+    if(timeValue==0){
+        clearInterval(timeInterval)
+        drawUI(`Time Out!`,310, 70,49)    
+        end = true;
+    }
+    else{
+    drawUI(`0:${timeValue}`,310, 70,49);}
+    drawUI(points,100, 70,40);
+    drawUI('',170, 70,43);
+    drawUI('1-10',240, 70,46);
+    
+}, 1000);
+setTimeout(() => {
+    let timeIntervalDestroer = setInterval(() => {
+        
+        UIcontainer.removeChildren(0)
+        if(timeValue==0){
+            clearInterval(timeIntervalDestroer)
+            drawUI(`Time Out!`,310, 70,49)
+            drawUI(points,100, 70,40);
+    drawUI('',170, 70,43);
+    drawUI('1-10',240, 70,46);    
+        }
+    }, 1000);    
+}, 900);
+
+}, 4900);
+function endOfthegame(end){
+    end?scene=3:console.log(end)
+    Game()
+}
  
    Game();
    drawBooks()
    animationOnEnteringTheScene();
    /* drawBalls(); */
    
-   
+   UIcontainer.children.forEach((children)=>{console.log(`childrens ${children}`)})
    
 
 
