@@ -392,7 +392,21 @@ Game()
     container.addChild(ContainerForBackgroundStuff);
 
    await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
-   
+    
+    /* class Draw{
+        constructor(names, container, ){
+            this.frames = names    
+            this.container = container
+        }
+        setFrames(){
+            let framesNames = Object.keys(this.frames.frames)
+            let cards = []
+            for (let x =0; x<framesNames.length; x++){
+                cards.push(PIXI.Texture.from(framesNames[x]))
+            }
+        }
+    } */
+
     async function drawBalls(){    
     const containerForBalls = new PIXI.Container();
     containerForBalls.anchor = (0.5)   
@@ -480,7 +494,7 @@ function DrawUINumber(TextToPut, xMove, YMove){
 
 let end = false;
 setTimeout(() => {
-    const now = new Date()
+    
 /* app.ticker.add(()=>{
     let NewNow = new Date();
     
@@ -490,38 +504,52 @@ setTimeout(() => {
     drawUI(`0:${Math.floor(60+(now.getSeconds()-NewNow.getSeconds()))}`,310, 70,49);
 
 }) */
+/* uiDrwaer().then(UiDestroer()) */
+uiDrwaer()
 
-let timeValue = 60;
-
-let timeInterval = setInterval(() => {
-    timeValue--
-    if(timeValue==0){
-        clearInterval(timeInterval)
-        drawUI(`Time Out!`,310, 70,49)    
-        end = true;
-    }
-    else{
-    drawUI(`0:${timeValue}`,310, 70,49);}
-    drawUI(points,100, 70,40);
-    drawUI('',170, 70,43);
-    drawUI('1-10',240, 70,46);
-    
-}, 1000);
-setTimeout(() => {
-    let timeIntervalDestroer = setInterval(() => {
-        
-        UIcontainer.removeChildren(0)
-        if(timeValue==0){
-            clearInterval(timeIntervalDestroer)
-            drawUI(`Time Out!`,310, 70,49)
-            drawUI(points,100, 70,40);
-    drawUI('',170, 70,43);
-    drawUI('1-10',240, 70,46);    
-        }
-    }, 1000);    
-}, 900);
 
 }, 4900);
+let timeValue = 60;
+async function uiDrwaer(){
+    
+
+    let timeInterval = setInterval(() => {
+        timeValue--
+        if(timeValue==-1){
+            clearInterval(timeInterval)
+            /* drawUI(`Time Out!`,310, 70,49)   */  
+            end = true;
+        }
+        else{
+            UIcontainer.removeChildren(0)
+        drawUI(`0:${timeValue}`,310, 70,49);}
+        drawUI(points,100, 70,40);
+        drawUI('',170, 70,43);
+        drawUI('1-10',240, 70,46);
+        
+    }, 1000);
+}
+
+
+//useless ->
+async function UiDestroer(){
+    setTimeout(() => {
+        let timeIntervalDestroer = setInterval(() => {
+            
+            UIcontainer.removeChildren(0)
+            
+            
+            if(timeValue==0){
+                clearInterval(timeIntervalDestroer)
+                drawUI(`Time Out!`,310, 70,49)
+                drawUI(points,100, 70,40);
+                drawUI('',170, 70,43);
+                drawUI('1-10',240, 70,46);    
+            }
+        }, 1000);    
+    }, 990);
+    
+}
 function endOfthegame(end){
     end?scene=3:console.log(end)
     Game()
