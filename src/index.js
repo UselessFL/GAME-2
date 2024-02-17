@@ -3,6 +3,7 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import ToysFirst from '../spritesTWO/ToysFirst.json'
 import BallsImport from '../spritesTWO/balls/Balls.json'
+import FishImport from '../spritesTWO/Fish/Fish.json'
 import ButtonAndMoreImport from '../spritesTWO/ButtonsAndMore.json'
 import { Assets, Sprite } from 'pixi.js';
 import {DropShadowFilter} from '@pixi/filter-drop-shadow';
@@ -124,20 +125,17 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         
 
     const EndBg = new PIXI.Sprite(PIXI.Texture.WHITE)
-    EndBg.width = app.stage.width;
-    EndBg.height = app.stage.height;
-    /* EndBg.x= EndScreen.width/2
-    EndBg.y = EndScreen.height/2 */
+    EndBg.width = container.width
+    EndBg.height = container.height + 100
     EndBg.x = 0
     EndBg.y = 0;
-    EndBg.tint = 0xffffff;
+    EndBg.tint = 0x24b8d4;
     EndBg.anchor.set(0.5)
-    EndScreen.addChild(EndBg)
     const textOnEndScreen = new PIXI.Text(TextToPutOnTheEndScreen, {fill: 0x00000, alpha: 0.5});
     textOnEndScreen.anchor.set(0.5);
      textOnEndScreen.x = EndScreen.width/2
     textOnEndScreen.y = EndScreen.height/2
-    EndScreen.addChild(textOnEndScreen)
+    EndScreen.addChild(EndBg,textOnEndScreen)
     }
    }
 
@@ -391,7 +389,7 @@ Game()
     ContainerForBackgroundStuff.y = app.screen.height / 2;
     container.addChild(ContainerForBackgroundStuff);
 
-   await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
+    
     
     /* class Draw{
         constructor(names, container, ){
@@ -406,7 +404,7 @@ Game()
             }
         }
     } */
-
+    await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
     async function drawBalls(){    
     const containerForBalls = new PIXI.Container();
     containerForBalls.anchor = (0.5)   
@@ -426,7 +424,63 @@ Game()
 
     drawBalls();    
 
-
+    await PIXI.Assets.load('../spritesTWO/Fish/Fish.json')
+//oop suck
+   /*  class Draw {
+        constructor( ContainerName,FrameNames){
+            this.Container = ContainerName
+            this.FF = FrameNames
+        }
+        CreateContainer(){
+            this.Container = new PIXI.Container()
+            this.Container.anchor = 0.5
+            container.addChild(this.Container)
+        }
+        CreateAnimatedTextures(animationSpeed, X,Y){
+            let frames =  Object.keys(this.FF.frames);
+            let cadrs = []
+            for(let x = 0; x<frames.length;x++){
+                cadrs.push(PIXI.Texture.from(this.FF[x]))
+            }
+            const anim = new PIXI.AnimatedSprite(cadrs)
+            anim.animationSpeed = animationSpeed
+            anim.play();
+            anim.x = X
+            anim.y = Y
+            this.Container.addChild(anim) 
+        }
+    } */
+    /* const containerForFish = new PIXI.Container();
+    let fish = new Draw(containerForFish,FishImport)
+    fish.CreateContainer();
+    fish.CreateAnimatedTextures(0.05,100, -155) */
+    async function drawFish(){    
+    const containerForFish = new PIXI.Container();
+    containerForFish.anchor = (0.5)   
+    container.addChild(containerForFish)  
+    let frameNames = Object.keys(FishImport.frames);
+    let cadrs = []
+    for(let x = 0; x < frameNames.length;x++){
+        cadrs.push(PIXI.Texture.from(frameNames[x]))
+    }   
+    const anim = new PIXI.AnimatedSprite(cadrs)
+    anim.animationSpeed = 0.05
+    anim.play();
+    console.log(anim.totalFrames)
+    anim.x = 235
+    anim.y = -155
+    containerForFish.addChild(anim)
+    /* anim.onFrameChange(()=>{console.log(anim.currentFrame)}) */
+    anim.onFrameChange = (()=>{
+        if(anim.currentFrame==6){
+        anim.stop()
+        gsap.to(anim, {x: 247,duration: 2,onComplete(){anim.play()}})
+    }
+    })
+    
+    }
+    drawFish();
+//gsap.to(bunny, {height:bunny.height+15,width:bunny.width+15 , duration: 0.25, repeat: 4, yoyo:true, onComplete(){bunny.visible = false}})
     async function drawNumbers(){
     const number1 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
     const number2 = new PIXI.Sprite(PIXI.Texture.from('3_17.png'))
@@ -557,8 +611,8 @@ function endOfthegame(end){
  
    Game();
    drawBooks()
-   animationOnEnteringTheScene();
-   /* drawBalls(); */
+   /* animationOnEnteringTheScene(); */
+   
    
    UIcontainer.children.forEach((children)=>{console.log(`childrens ${children}`)})
    
