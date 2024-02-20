@@ -57,6 +57,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
    let scene = 1;
    let points = 0;
+   let TruesInARow = 0 ;
    function poryadokOfTheToysOnTheShelf(i){     
         let place = [];
         place[0] = columns[i-1]
@@ -141,6 +142,7 @@ async function onToyClickedTrue(){
 drawUtility(12, true)
 toysContainer.getChildAt(removableToy).visible=true ;
 points += 100;
+TruesInARow+=1;
 setTimeout(() => {
     
 AnimationOnButtonDown(scene)
@@ -158,6 +160,7 @@ let OshibkiVIgre = 0
 async function onToyClickedFalse(){
     drawUtility(19, false)
     OshibkiVIgre+=1;
+    TruesInARow =0;
     setTimeout(() => {
     
         AnimationOnButtonDown(scene)
@@ -535,7 +538,7 @@ const UIcontainer = new PIXI.Container();
    UIcontainer.anchor = 0.5
    UIcontainer.zIndex = -1
     container.addChild(UIcontainer);
-function drawUI(TextToPut,XX,width,gap, CrossNede){
+function drawUI(TextToPut,XX,width,gap, CrossNede, circleNeed){
     const UI = new PIXI.Sprite(PIXI.Texture.WHITE)
     UI.width=width;
     UI.height=30;
@@ -549,15 +552,12 @@ function drawUI(TextToPut,XX,width,gap, CrossNede){
     text.anchor.set(0.5)
     text.x = UI.x-UI.width/2;
     text.y = UI.y-UI.height/2;
-    /* if(TextToPut ==0){
-        text.x = UI.x - 10
+    if(TextToPut =='1-10'|| TextToPut=='2-10'){
+       text.x =  UI.x-UI.width/2-40
+        
     }
-    if(TextToPut <0 || TextToPut>60){
-        TextToPut = 0 
-    } */
+   
     if(CrossNede){
-        
-        
         for(let x=0; x<OshibkiVIgre&& x<3; x++){
             const Redcross = new PIXI.Sprite(PIXI.Texture.from('./Crosses/RedCross.png') )
         Redcross.angle = 45
@@ -578,21 +578,28 @@ function drawUI(TextToPut,XX,width,gap, CrossNede){
         }
         
     }
-    
+    if(circleNeed){
+        for(let x=0; x<TruesInARow && x<3; x++){
+            const YellowCircle = new PIXI.Sprite(PIXI.Texture.from('./Circles/WhiteCircle.png') )
+            YellowCircle.width = 20
+            YellowCircle.height = 20
+            YellowCircle.x = UI.x-UI.width/2 -10 + 25*x;
+            YellowCircle.y = UI.y-UI.height/2 -10;
+            UIcontainer.addChild(YellowCircle)
+        }
+        for(let x=0; x<3-TruesInARow; x++){
+            const WhiteCircle = new PIXI.Sprite(PIXI.Texture.from('./Circles/YellowCircle.png') )
+            WhiteCircle.width = 20
+            WhiteCircle.height = 20
+            WhiteCircle.x = UI.x-UI.width/2 +40 - 25*x;
+            WhiteCircle.y = UI.y-UI.height/2-10;
+            UIcontainer.addChild(WhiteCircle)
+        }
+        
+    }
 
     
 }  
-function DrawUINumber(TextToPut, xMove, YMove){
-    const text = new PIXI.Text(TextToPut, {fill: 0xf5f7fa, alpha: 0.5});
-    
-
-    text.x = 400;
-    text.y = -250;
-    text.x -= xMove;
-    text.y -= YMove;
-    text.anchor.set(1)
-    UIcontainer.addChild(text)
-} 
 
 let end = false;
 setTimeout(() => {
@@ -644,10 +651,11 @@ async function uiDrwaer(){
         }
         else{
             UIcontainer.removeChildren(0)
-        drawUI(`0:${timeValue}`,310, 70,49);}
+       
         drawUI(points,100, 70,40);
-        drawUI(/* `${crossMas[0]} ${crossMas[1]} ${crossMas[2]}` */'',170, 70,43, true);
-        drawUI('1-10',240, 70,46);
+        drawUI('',170, 70,43, true);
+        drawUI('1-10',170,140,46, false,true);
+        drawUI(`0:${timeValue}`,380, 70,49);}
         
         
     }, 1000);
