@@ -1,0 +1,56 @@
+.cross {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .cross:before, 
+  .cross:after {
+    content: '';
+    position: absolute;
+    top: 30px; 
+    width: 40px;
+    height: 40px;
+    border: 10px solid black;
+  }
+  
+  .cross:before {
+    left: 30px;
+    transform: rotate(45deg);
+  }
+  
+  .cross:after {
+    right: 30px; 
+    transform: rotate(-45deg);
+  }
+  
+  .red-cross {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .red-cross:before,
+  .red-cross:after {
+    content: '';
+    position: absolute;
+    top: 30px;
+    width: 40px; 
+    height: 40px;
+    border: 10px solid transparent;
+    border-top-color: red;
+    border-right-color: red;
+  }
+  
+  .red-cross:before {
+    left: 30px;
+    transform: rotate(45deg); 
+  }
+  
+  .red-cross:after {
+    right: 30px;
+    transform: rotate(-45deg);
+  }
+  

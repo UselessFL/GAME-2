@@ -156,8 +156,10 @@ setTimeout(() => {
 }, 1200);
 
 }
+let OshibkiVIgre = 0
 async function onToyClickedFalse(){
     drawUtility(19, false)
+    OshibkiVIgre+=1;
     setTimeout(() => {
     
         AnimationOnButtonDown(scene)
@@ -464,7 +466,7 @@ Game()
         cadrs.push(PIXI.Texture.from(frameNames[x]))
     }   
     const anim = new PIXI.AnimatedSprite(cadrs)
-    anim.animationSpeed = 0.05
+    anim.animationSpeed = 0.03
     anim.play();
     console.log(anim.totalFrames)
     anim.x = 235
@@ -472,10 +474,21 @@ Game()
     containerForFish.addChild(anim)
     /* anim.onFrameChange(()=>{console.log(anim.currentFrame)}) */
     anim.onFrameChange = (()=>{
-        if(anim.currentFrame==6){
+      /*   if(anim.currentFrame==6){
         anim.stop()
-        gsap.to(anim, {x: 247,duration: 2,onComplete(){anim.play()}})
+        gsap.to(anim, {x: 247,duration: 1,onComplete(){anim.play()}})
     }
+    if(anim.currentFrame ==12){
+        gsap.to(anim, {x: 242, duration: 1, y: -165,onComplete(){gsap.to(anim, {x: 235, duration: 1, y: -155})}})
+    }
+        if(anim.currentFrame==18){
+        anim.stop()
+        gsap.to(anim, {x: 247,duration: 1,onComplete(){anim.play()}})
+    }
+    if(anim.currentFrame ==24){
+        gsap.to(anim, {x: 242, duration: 1, y: -165,onComplete(){gsap.to(anim, {x: 235, duration: 1, y: -155})}})
+    } */
+    //заменить текстуры на фрейм с в право, влево, плоски и прыжок 
     })
     
     }
@@ -564,11 +577,25 @@ uiDrwaer()
 
 }, 4900);
 let timeValue = 60;
+/* const Redcross = document.getElementById('redCross').textContent
+const cross = document.getElementById('Cross').textContent */
+const Redcross = '\u2A2F'
+const cross = '\u2A2F'
+let crossMas = []
+
+console.log(cross)
 async function uiDrwaer(){
     
 
     let timeInterval = setInterval(() => {
         timeValue--
+        crossMas.length=0
+        for (let x =0; x<OshibkiVIgre;x++){
+            crossMas.push(Redcross)
+        }
+        for (let x =0; x<3-OshibkiVIgre;x++){
+            crossMas.push(Redcross)
+        }
         if(timeValue==-1){
             clearInterval(timeInterval)
             /* drawUI(`Time Out!`,310, 70,49)   */  
@@ -578,8 +605,10 @@ async function uiDrwaer(){
             UIcontainer.removeChildren(0)
         drawUI(`0:${timeValue}`,310, 70,49);}
         drawUI(points,100, 70,40);
-        drawUI('',170, 70,43);
+        drawUI(`${crossMas[0]} ${crossMas[1]} ${crossMas[2]}`,170, 70,43);
         drawUI('1-10',240, 70,46);
+        
+        console.log(crossMas)
         
     }, 1000);
 }
@@ -605,6 +634,7 @@ async function UiDestroer(){
     
 }
 function endOfthegame(end){
+    OshibkiVIgre ==4? scene=3:''
     end?scene=3:console.log(end)
     Game()
 }
