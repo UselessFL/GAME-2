@@ -121,9 +121,6 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         EndScreen.scale.set(0.8)
         app.stage.addChild(EndScreen)
         container.visible = false
-        
-        
-
     const EndBg = new PIXI.Sprite(PIXI.Texture.WHITE)
     EndBg.width = container.width
     EndBg.height = container.height + 100
@@ -136,6 +133,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
      textOnEndScreen.x = EndScreen.width/2
     textOnEndScreen.y = EndScreen.height/2
     EndScreen.addChild(EndBg,textOnEndScreen)
+    drawButton('Еще раз?', 0xFFFFFF,EndScreen,{x: EndScreen.width/150, y:200}, true)
     }
    }
 
@@ -265,11 +263,11 @@ Game()
         
     }
    
-   function drawButton(TextToPut, color, parent, pos){
+   function drawButton(TextToPut, color, parent, pos, endbutton){
     const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
     bg.width = 180;
     bg.height = 47;
-    bg.tint = 0xf0e47c;
+    endbutton? bg.tint = color : bg.tint = 0xf0e47c;
     bg.anchor.set(0.5)
     const text = new PIXI.Text(TextToPut, {fill: 0x244bb5, alpha: 0.5});
     text.anchor.set(0.5);
@@ -278,11 +276,18 @@ Game()
     containerOneForButton.addChild(bg, text)
     containerOneForButton.eventMode = 'static';
     containerOneForButton.cursor = 'pointer';
-    containerOneForButton.on('pointerdown', onButtonDownHide)
-    containerOneForButton.on('pointerover', onButtonOver)
-    containerOneForButton.on('pointerout', onButtonOut);
+    if(endbutton){
+        containerOneForButton.on('pointerdown', OnEndButton)
+    }else{
+        containerOneForButton.on('pointerdown', onButtonDownHide)
+        containerOneForButton.on('pointerover', onButtonOver)
+        containerOneForButton.on('pointerout', onButtonOut)
+    
+    }
     parent.addChild(containerOneForButton)
+    if(endbutton){
 
+    }else{
     const textu = PIXI.Texture.from('./Sprites/2_78.png')  
 
     const bubilda = new PIXI.Sprite(textu)
@@ -300,8 +305,11 @@ Game()
     
     bubildaRight.x = bg.x+bg.width/2 +3
     bubildaRight.y = bg.y
+    
     containerOneForButton.addChild(bubilda)
     containerOneForButton.addChild(bubildaRight)
+    }
+    
    }
     function onButtonDownHide(){
         /* toysContainer.visible=false; */
@@ -309,6 +317,9 @@ Game()
         scene = 2;
         Game()
         AnimationOnButtonDown()
+    }
+    function OnEndButton(){
+        location.reload();
     }
     function onButtonOver(){
        /*  containerOneForButton.scale.set(0.97) */
@@ -509,7 +520,7 @@ for(let x = 0; x<3;x++)
     a.y = 0
     a.scale.set(2)
         container.addChild(a)
-        console.log(`number ${x} has added`)
+        
     }, 1300*x);
     setTimeout(() => {
        
@@ -524,7 +535,7 @@ const UIcontainer = new PIXI.Container();
    UIcontainer.anchor = 0.5
    UIcontainer.zIndex = -1
     container.addChild(UIcontainer);
-function drawUI(TextToPut,XX,width,gap){
+function drawUI(TextToPut,XX,width,gap, CrossNede){
     const UI = new PIXI.Sprite(PIXI.Texture.WHITE)
     UI.width=width;
     UI.height=30;
@@ -544,7 +555,31 @@ function drawUI(TextToPut,XX,width,gap){
     if(TextToPut <0 || TextToPut>60){
         TextToPut = 0 
     } */
+    if(CrossNede){
+        
+        
+        for(let x=0; x<OshibkiVIgre&& x<3; x++){
+            const Redcross = new PIXI.Sprite(PIXI.Texture.from('./Crosses/RedCross.png') )
+        Redcross.angle = 45
+            Redcross.width = 25
+            Redcross.height = 25
+            Redcross.x = UI.x-UI.width/2 -25 + 25*x;
+            Redcross.y = UI.y-UI.height/2 -17;
+            UIcontainer.addChild(Redcross)
+        }
+        for(let x=0; x<3-OshibkiVIgre; x++){
+            const cross = new PIXI.Sprite(PIXI.Texture.from('./Crosses/WhiteCross.png') )
+            cross.angle = 45
+            cross.width = 25
+            cross.height = 25
+            cross.x = UI.x-UI.width/2 +25 - 25*x;
+            cross.y = UI.y-UI.height/2-17;
+            UIcontainer.addChild(cross)
+        }
+        
+    }
     
+
     
 }  
 function DrawUINumber(TextToPut, xMove, YMove){
@@ -575,27 +610,33 @@ setTimeout(() => {
 uiDrwaer()
 
 
-}, 4900);
+}, 1);
 let timeValue = 60;
 /* const Redcross = document.getElementById('redCross').textContent
 const cross = document.getElementById('Cross').textContent */
-const Redcross = '\u2A2F'
+/* let Redcross = '\u2A2F';
+Redcross.fontcolor = 'red'; */
+
+/* function modernFontColor(str, color) {
+    return '<span style="color: ' + color + '">' + str + '</span>';
+} */
+    
 const cross = '\u2A2F'
 let crossMas = []
 
-console.log(cross)
+
 async function uiDrwaer(){
-    
+
 
     let timeInterval = setInterval(() => {
         timeValue--
-        crossMas.length=0
-        for (let x =0; x<OshibkiVIgre;x++){
-            crossMas.push(Redcross)
+        /* crossMas.length=0 */
+        /* for (let x =0; x<OshibkiVIgre;x++){
+            crossMas.push()
         }
         for (let x =0; x<3-OshibkiVIgre;x++){
-            crossMas.push(Redcross)
-        }
+            crossMas.push(cross)
+        } */
         if(timeValue==-1){
             clearInterval(timeInterval)
             /* drawUI(`Time Out!`,310, 70,49)   */  
@@ -605,34 +646,16 @@ async function uiDrwaer(){
             UIcontainer.removeChildren(0)
         drawUI(`0:${timeValue}`,310, 70,49);}
         drawUI(points,100, 70,40);
-        drawUI(`${crossMas[0]} ${crossMas[1]} ${crossMas[2]}`,170, 70,43);
+        drawUI(/* `${crossMas[0]} ${crossMas[1]} ${crossMas[2]}` */'',170, 70,43, true);
         drawUI('1-10',240, 70,46);
         
-        console.log(crossMas)
         
     }, 1000);
 }
 
 
 //useless ->
-async function UiDestroer(){
-    setTimeout(() => {
-        let timeIntervalDestroer = setInterval(() => {
-            
-            UIcontainer.removeChildren(0)
-            
-            
-            if(timeValue==0){
-                clearInterval(timeIntervalDestroer)
-                drawUI(`Time Out!`,310, 70,49)
-                drawUI(points,100, 70,40);
-                drawUI('',170, 70,43);
-                drawUI('1-10',240, 70,46);    
-            }
-        }, 1000);    
-    }, 990);
-    
-}
+
 function endOfthegame(end){
     OshibkiVIgre ==4? scene=3:''
     end?scene=3:console.log(end)
