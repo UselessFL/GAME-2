@@ -74,6 +74,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    ToyButtonContainer.pivot.set(560, 320)
    container.addChild(ToyButtonContainer);
    const containerOneForButton = new PIXI.Container();
+   
    drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
 
    let removableToy;
@@ -94,6 +95,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
         /* 
         containerOneForButton.visible= true; */
+        drawBooks()
         
     }
     if(scene == 2){
@@ -267,6 +269,7 @@ Game()
     }
    
    function drawButton(TextToPut, color, parent, pos, endbutton){
+    containerOneForButton.removeChildren();
     const bg = new PIXI.Sprite(PIXI.Texture.WHITE)
     bg.width = 180;
     bg.height = 47;
@@ -331,20 +334,32 @@ Game()
         containerOneForButton.scale.set(1)
     }
     
+    
+    const containerForBoks = new PIXI.Container();
+    containerForBoks.x = container.x-315;
+    containerForBoks.y = container.y-238;
+    containerForBoks.width = container.width
+    containerForBoks.height = container.height
+    containerForBoks.anchor = 0.5
+    console.log(containerForBoks.width)
+    /* 
+    containerForBoks.scale.set(0.8)
+    containerForBoks.visible = true */
+    container.addChild(containerForBoks);
+   
     async function drawBooks(){
+        containerForBoks.removeChildren(0)
         const val1 = "2_14.png"
         const val2 = "2_35.png"
         const val3 = "2_38.png"
         const val4 = "2_83.png"
         poryadok.length = poryadok.length-2
-        console.log(`poryadok after trim ${poryadok}`)
         
         let val
         for (let i =1; i<7;i++){
             
             for(let j = 1; j<6; j++){
                 const random = Math.floor(Math.random()*4)
-                
                 switch (random) {
                     case 0:
                         val=val1
@@ -362,12 +377,12 @@ Game()
                         val = val1
                         break;
                 }
-                /* random == 0  ? val = val1: val=val2 */
+                
                 const texture = PIXI.Texture.from(val) 
                 const bunny = new PIXI.Sprite(texture);   
                 bunny.anchor.set(0.5)
                 
-                if(/* poryadok.includes(j) & */ i == 3){
+                if( i == 3){
                     continue
                 }else{
                     bunny.x = columns[j-1]-540
@@ -375,7 +390,8 @@ Game()
                     bunny.scale.set(0.7)
                     bunny.tint = 0xFF55FF
                     
-                    container.addChild(bunny)
+                    containerForBoks.addChild(bunny)
+                    
                 }
                 
             }
@@ -671,7 +687,7 @@ function endOfthegame(end){
 }
  
    Game();
-   drawBooks()
+   
    /* animationOnEnteringTheScene(); */
    
    
