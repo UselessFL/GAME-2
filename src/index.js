@@ -112,9 +112,9 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
             rand(5)
         RandomNumberOfToys(6)
         for (let i =0; i < 2; i++){ drawToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
-        drawToys(toys[3], 0.60,poryadokOfTheToysOnTheShelf('',true), toysContainer)
+        drawToys(toys[2], 0.60,poryadokOfTheToysOnTheShelf('',true), toysContainer)
         }   
-        if(raund==3){
+        if(raund>2){
             rand(5)
         RandomNumberOfToys(8)
         for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60, poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
@@ -126,7 +126,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         
     }
     if(scene == 2){
-        if(raund == 3){
+        if(raund > 2){
             containerOneForButton.visible= false;
             let toyToRemove = Math.floor(Math.random()*4)
             toysContainer.getChildAt(toyToRemove).visible=false ; 
@@ -182,7 +182,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 async function onToyClickedTrue(){
 drawUtility(12, true)
 toysContainer.getChildAt(removableToy).visible=true ;
-points += 100;
+points += 100*raund;
 TruesInARow+=1;
 if(TruesInARow ==3){
     raund+=1;
@@ -396,7 +396,7 @@ Game()
         const val2 = "2_35.png"
         const val3 = "2_38.png"
         const val4 = "2_83.png"
-        poryadok.length = poryadok.length-2
+        poryadok.length = 0
         
         let val
         for (let i =1; i<7;i++){
@@ -425,7 +425,7 @@ Game()
                 const bunny = new PIXI.Sprite(texture);   
                 bunny.anchor.set(0.5)
                 
-                if( i == 3){
+                if( i == 3 || (raund>1 && j==1&& i==4)){
                     continue
                 }else{
                     bunny.x = columns[j-1]-540
