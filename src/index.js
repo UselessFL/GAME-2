@@ -42,6 +42,11 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
    let toys = []
    let frameNames = Object.keys(ToysFirst.frames);
+   let scene = 1;
+   let points = 0;
+   let TruesInARow = 0 ;
+   let removableToy;
+   let raund = 1;
    console.log(`asd ${frameNames}`)
 
    function RandomNumberOfToys(i){
@@ -55,19 +60,31 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    console.log(`Numbers of toys is: ${toys}`)
    }
 
-   let scene = 1;
-   let points = 0;
-   let TruesInARow = 0 ;
-   function poryadokOfTheToysOnTheShelf(i){     
+   
+   function poryadokOfTheToysOnTheShelf(i,j){     
         let place = [];
+        if(j){
+            place[0] = columns[0]
+            place[1] = rows[3]
+        }
+        else{
         place[0] = columns[i-1]
         place[1] = rows[2]
+        }
     return place;
    }
    function poryadokAfterButton(i){
     let placee = [];
-    placee[0]= i*100 + 450
-    placee[1] = 550
+    if(raund==3){
+        placee[0]= i*100 + 390
+        placee[1] = 550
+    
+    }
+    else{
+        placee[0]= i*100 + 450
+        placee[1] = 550
+    }
+    
     return placee
    }
    const ToyButtonContainer = new PIXI.Container();
@@ -77,33 +94,55 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    
    drawButton('запомнил', 0xFFFF00, container, {x: container.width/150, y:200} )
 
-   let removableToy;
    
    function Game(){
     if (scene == 1){
         poryadok.length=0
         toys.length=0
-        
-        for(let x =0; x<3; x++){
-            while(toysContainer.children[x]){toysContainer.removeChild(toysContainer.children[x])}}
-    
-        for(let x =0; x<3; x++){
-            while(ToyButtonContainer.children[x]){ToyButtonContainer.removeChild(ToyButtonContainer.children[x])}}
-    
+       toysContainer.removeChildren(); 
+       ToyButtonContainer.removeChildren();
+       if(raund==1)
+       {
         rand(5)
         RandomNumberOfToys(6)
         for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
-        /* 
-        containerOneForButton.visible= true; */
-        drawBooks()
+        }
+        if(raund==2)
+        {
+            rand(5)
+        RandomNumberOfToys(6)
+        for (let i =0; i < 2; i++){ drawToys(toys[i], 0.60,poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
+        drawToys(toys[3], 0.60,poryadokOfTheToysOnTheShelf('',true), toysContainer)
+        }   
+        if(raund==3){
+            rand(5)
+        RandomNumberOfToys(8)
+        for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60, poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
+        drawToys(toys[4], 0.60, poryadokOfTheToysOnTheShelf('', true), toysContainer)
+        
+        }
+             
+    drawBooks()
         
     }
     if(scene == 2){
-        
-        containerOneForButton.visible= false;
+        if(raund == 3){
+            containerOneForButton.visible= false;
+            let toyToRemove = Math.floor(Math.random()*4)
+            toysContainer.getChildAt(toyToRemove).visible=false ; 
+            removableToy = toyToRemove;
+           let randomOfthree = Math.floor(Math.random()*4)
+           console.log(`random number of the toy is ${randomOfthree}`)
+           for (let i =0; i < 4; i++){ 
+            if (i== randomOfthree){continue}
+            drawToys(toys[i+4], 1.00, poryadokAfterButton(i), ToyButtonContainer, true)
+        }
+           drawToys(toys[toyToRemove], 1.00, poryadokAfterButton(randomOfthree), ToyButtonContainer,true, true)
+     
+        }else
+        {
+            containerOneForButton.visible= false;
         let toyToRemove = Math.floor(Math.random()*3)
-        console.log(toyToRemove,toys,toys[toyToRemove] )
- /*        toysContainer.removeChildAt(toyToRemove) ;  */
         toysContainer.getChildAt(toyToRemove).visible=false ; 
         removableToy = toyToRemove;
        let randomOfthree = Math.floor(Math.random()*3)
@@ -113,7 +152,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         drawToys(toys[i+3], 1.00, poryadokAfterButton(i), ToyButtonContainer, true)
     }
        drawToys(toys[toyToRemove], 1.00, poryadokAfterButton(randomOfthree), ToyButtonContainer,true, true)
-   
+   }
     }
     if(scene ==3){
         let  TextToPutOnTheEndScreen = `Congratulations!\nYour score is:${points}`
@@ -145,6 +184,10 @@ drawUtility(12, true)
 toysContainer.getChildAt(removableToy).visible=true ;
 points += 100;
 TruesInARow+=1;
+if(TruesInARow ==3){
+    raund+=1;
+    TruesInARow=0;
+}
 setTimeout(() => {
     
 AnimationOnButtonDown(scene)
@@ -388,7 +431,7 @@ Game()
                     bunny.x = columns[j-1]-540
                     bunny.y = rows[i-1]-340
                     bunny.scale.set(0.7)
-                    bunny.tint = 0xFF55FF
+                    bunny.tint = 0x2c6c9c
                     
                     containerForBoks.addChild(bunny)
                     
@@ -558,7 +601,7 @@ function drawUI(TextToPut,XX,width,gap, CrossNede, circleNeed){
     const UI = new PIXI.Sprite(PIXI.Texture.WHITE)
     UI.width=width;
     UI.height=30;
-    UI.tint = 0xc9ccd1;
+    UI.tint = 0x8cbcec;
     UI.alpha=0.5
     UI.x = 600-(width+XX)-gap;
     UI.y = -270
@@ -568,7 +611,7 @@ function drawUI(TextToPut,XX,width,gap, CrossNede, circleNeed){
     text.anchor.set(0.5)
     text.x = UI.x-UI.width/2;
     text.y = UI.y-UI.height/2;
-    if(TextToPut =='1-10'|| TextToPut=='2-10'){
+    if(TextToPut ==`${raund}-10`){
        text.x =  UI.x-UI.width/2-40
         
     }
@@ -670,7 +713,7 @@ async function uiDrwaer(){
        
         drawUI(points,100, 70,40);
         drawUI('',170, 70,43, true);
-        drawUI('1-10',170,140,46, false,true);
+        drawUI(`${raund}-10`,170,140,46, false,true);
         drawUI(`0:${timeValue}`,380, 70,49);}
         
         
