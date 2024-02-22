@@ -441,44 +441,29 @@ Game()
         }
     }
     function AnimationOnButtonDown(scene, time){
-        backk.tint = 0x999999
-        BackOnTheLeft.tint = 0x999999
+        backk.tint = 0xadacac
+        BackOnTheLeft.tint = 0xadacac
         toysContainer.visible = false
         ToyButtonContainer.visible = false
         
         containerOneForButton.visible= false;
-        
+        BackgroundStuff(2)
         setTimeout(() => {
             backk.tint = 0xFFFFFF
             BackOnTheLeft.tint = 0xFFFFFF
         toysContainer.visible = true
         ToyButtonContainer.visible = true
-        
+        scene? BackgroundStuff(1) : BackgroundStuff(3)
         scene?containerOneForButton.visible= true:''
         
         
-        }, time?1500 + time: 1200);
+        }, time?1500 + time: 1000);
     }
     const ContainerForBackgroundStuff = new PIXI.Container();
     ContainerForBackgroundStuff.x = app.screen.width / 2;
     ContainerForBackgroundStuff.y = app.screen.height / 2;
     container.addChild(ContainerForBackgroundStuff);
 
-    
-    
-    /* class Draw{
-        constructor(names, container, ){
-            this.frames = names    
-            this.container = container
-        }
-        setFrames(){
-            let framesNames = Object.keys(this.frames.frames)
-            let cards = []
-            for (let x =0; x<framesNames.length; x++){
-                cards.push(PIXI.Texture.from(framesNames[x]))
-            }
-        }
-    } */
     await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
     async function drawBalls(){    
     const containerForBalls = new PIXI.Container();
@@ -497,38 +482,10 @@ Game()
     containerForBalls.addChild(anim) 
     }
 
-    drawBalls();    
+  
 
     await PIXI.Assets.load('../spritesTWO/Fish/Fish.json')
-//oop suck
-   /*  class Draw {
-        constructor( ContainerName,FrameNames){
-            this.Container = ContainerName
-            this.FF = FrameNames
-        }
-        CreateContainer(){
-            this.Container = new PIXI.Container()
-            this.Container.anchor = 0.5
-            container.addChild(this.Container)
-        }
-        CreateAnimatedTextures(animationSpeed, X,Y){
-            let frames =  Object.keys(this.FF.frames);
-            let cadrs = []
-            for(let x = 0; x<frames.length;x++){
-                cadrs.push(PIXI.Texture.from(this.FF[x]))
-            }
-            const anim = new PIXI.AnimatedSprite(cadrs)
-            anim.animationSpeed = animationSpeed
-            anim.play();
-            anim.x = X
-            anim.y = Y
-            this.Container.addChild(anim) 
-        }
-    } */
-    /* const containerForFish = new PIXI.Container();
-    let fish = new Draw(containerForFish,FishImport)
-    fish.CreateContainer();
-    fish.CreateAnimatedTextures(0.05,100, -155) */
+
     async function drawFish(){    
     const containerForFish = new PIXI.Container();
     containerForFish.anchor = (0.5)   
@@ -592,6 +549,7 @@ for(let x = 0; x<3;x++)
 
 
 }
+
 const UIcontainer = new PIXI.Container();
    /*  UIcontainer.pivot.set(560, 320) */
    UIcontainer.anchor = 0.5
@@ -605,7 +563,7 @@ function drawUI(TextToPut,XX,width,gap, CrossNede, circleNeed){
     UI.alpha=0.5
     UI.x = 600-(width+XX)-gap;
     UI.y = -270
-    const text = new PIXI.Text(TextToPut, {fill: 0xf5f7fa, alpha: 0.5, align: "left",fontSize:16, fontFamily:'roboto'});
+    const text = new PIXI.Text(TextToPut, {fill: 0x456e90, alpha: 0.5, align: "left",fontSize:16, fontFamily:'Roboto'});
     UI.anchor.set(1)
     UIcontainer.addChild(UI,text)
     text.anchor.set(0.5)
@@ -677,18 +635,9 @@ uiDrwaer()
 
 
 }, 1);
-let timeValue = 60;
-/* const Redcross = document.getElementById('redCross').textContent
-const cross = document.getElementById('Cross').textContent */
-/* let Redcross = '\u2A2F';
-Redcross.fontcolor = 'red'; */
+let timeValue = 61;
 
-/* function modernFontColor(str, color) {
-    return '<span style="color: ' + color + '">' + str + '</span>';
-} */
     
-const cross = '\u2A2F'
-let crossMas = []
 
 
 async function uiDrwaer(){
@@ -696,16 +645,9 @@ async function uiDrwaer(){
 
     let timeInterval = setInterval(() => {
         timeValue--
-        /* crossMas.length=0 */
-        /* for (let x =0; x<OshibkiVIgre;x++){
-            crossMas.push()
-        }
-        for (let x =0; x<3-OshibkiVIgre;x++){
-            crossMas.push(cross)
-        } */
+        
         if(timeValue==-1){
             clearInterval(timeInterval)
-            /* drawUI(`Time Out!`,310, 70,49)   */  
             end = true;
         }
         else{
@@ -714,15 +656,84 @@ async function uiDrwaer(){
         drawUI(points,100, 70,40);
         drawUI('',170, 70,43, true);
         drawUI(`${raund}-10`,170,140,46, false,true);
-        drawUI(`0:${timeValue}`,380, 70,49);}
+        timeValue==60?
+        drawUI(`1:00`,380, 70,49)
+        :
+            timeValue<10?
+            drawUI(`0:0${timeValue}`,380, 70,49)
+            :
+            drawUI(`0:${timeValue}`,380, 70,49);
+    }
         
         
     }, 1000);
 }
+const containerFordecorations = new PIXI.Container();
+containerFordecorations.x =container.x
+containerFordecorations.y = container.y
+container.addChild(containerFordecorations)
 
+let counter = 0;
+function BackgroundStuff(stateOfBack){
+    containerFordecorations.removeChildren();
+    counter+=0.5;
+    const painting = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_36.png')  )
+    const cat = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_111.png')  )
+    const catToLeft = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_151.png')  )
+    const catToRight = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_150.png')  )
+    const uprightFlower = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_128.png')  )
+    const ballsStill = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_138.png')  )
+    const leftLamp = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_02.png')  )
+    const rightLamp = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_03.png')  )
+    const paintingInShadow = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_92.png')  )
+    const downFlower = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_141.png')  )
+    paintingInShadow.tint = 0xadacac;
+    catToLeft.tint = 0xadacac;
+    catToRight.tint = 0xadacac; 
+    
+    function setPlace(name,X,Y){
+        name.x= X;
+        name.y= Y;
+        containerFordecorations.addChild(name);
+    }
+    if(stateOfBack==1){
+        setPlace(painting, -600, -500)
+        painting.anchor.set(0.5,0)
+        setPlace(cat, -587,-287)
+        setPlace(uprightFlower, -420,-518)
+        setPlace(ballsStill, -260,-498)
+        setPlace(leftLamp, -645,-350)
+        setPlace(rightLamp, -90,-350)
+        counter==0.5?
+        ''
+        :
+        gsap.to(painting, {rotation: 0.5, duration: 0.5, ease: "power1.out", onComplete(){gsap.to(painting, {rotation: 0, duration:4, ease: "elastic.out(2,0.75)", })}})
+    }
+    if(stateOfBack==2){
+        setPlace(paintingInShadow, -600, -500)
+        paintingInShadow.anchor.set(0.5,0)
+        counter%2==0?'':gsap.to(paintingInShadow, {rotation: -0.5, duration: 0.5,ease: "power1.out",onComplete(){gsap.to(paintingInShadow,{rotation: 0.1,duration:0.5,ease: "power1.out",})}})
+        setPlace(downFlower, -420, -485)
+        counter%2==0?setPlace(catToLeft,-360,-518):setPlace(catToRight, -360,-518)
+        setPlace(ballsStill, -260,-498)
+        downFlower.tint = 0xadacac;
+        ballsStill.tint = 0xadacac;
+        
+    }
+    if(stateOfBack==3){
+        setPlace(painting, -600,-500)
+        painting.anchor.set(0.5,0)
+        gsap.to(painting, {rotation: 0.1,duration:0, onComplete(){gsap.to(painting, {rotation: 0, duration:0.5, ease: "power1.out" })}})
+        setPlace(cat, -60,-287)
+        setPlace(downFlower, -420, -485)
+        setPlace(ballsStill, -260,-498)
+        setPlace(leftLamp, -645,-350)
+        setPlace(rightLamp, -90,-350)
+    }
+    
+}
 
-//useless ->
-
+BackgroundStuff(1);
 function endOfthegame(end){
     OshibkiVIgre ==4? scene=3:''
     end?scene=3:console.log(end)
@@ -730,11 +741,9 @@ function endOfthegame(end){
 }
  
    Game();
-   
+   /*   drawBalls();     */
    /* animationOnEnteringTheScene(); */
    
-   
-   UIcontainer.children.forEach((children)=>{console.log(`childrens ${children}`)})
    
 
 
