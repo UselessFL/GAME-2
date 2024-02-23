@@ -46,7 +46,10 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    let points = 0;
    let TruesInARow = 0 ;
    let removableToy;
-   let raund = 1;
+   let removableToyMass = [];
+   let raund = 3;
+   let counterForRightAnswers = 1;
+   let CurrentRightAnswers = 0;
    console.log(`asd ${frameNames}`)
 
    function RandomNumberOfToys(i){
@@ -75,7 +78,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    }
    function poryadokAfterButton(i){
     let placee = [];
-    if(raund==3){
+    if(raund>2){
         placee[0]= i*100 + 390
         placee[1] = 550
     
@@ -96,6 +99,7 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 
    
    function Game(){
+    CurrentRightAnswers = 0;
     if (scene == 1){
         poryadok.length=0
         toys.length=0
@@ -115,10 +119,11 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         drawToys(toys[2], 0.60,poryadokOfTheToysOnTheShelf('',true), toysContainer)
         }   
         if(raund>2){
+            counterForRightAnswers=2;
             rand(5)
         RandomNumberOfToys(8)
         for (let i =0; i < 3; i++){ drawToys(toys[i], 0.60, poryadokOfTheToysOnTheShelf(poryadok[i]), toysContainer)}
-        drawToys(toys[4], 0.60, poryadokOfTheToysOnTheShelf('', true), toysContainer)
+        drawToys(toys[3], 0.60, poryadokOfTheToysOnTheShelf('', true), toysContainer)
         
         }
              
@@ -126,20 +131,47 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
         
     }
     if(scene == 2){
+        removableToyMass.length=0;
         if(raund > 2){
+            let randomOfthree =[]
+            
             containerOneForButton.visible= false;
-            let toyToRemove = Math.floor(Math.random()*4)
-            toysContainer.getChildAt(toyToRemove).visible=false ; 
-            removableToy = toyToRemove;
-           let randomOfthree = Math.floor(Math.random()*4)
-           console.log(`random number of the toy is ${randomOfthree}`)
-           for (let i =0; i < 4; i++){ 
-            if (i== randomOfthree){continue}
+            for(let x = 0;x<2;){
+                let a = Math.floor(Math.random()*4);
+                if(!removableToyMass.includes(a)){
+                    removableToyMass.push(a);
+                    x++;
+                }
+            }
+            for(let x = 0;x<2;){
+                let a = Math.floor(Math.random()*4);
+                if(!randomOfthree.includes(a)){
+                    randomOfthree.push(a);
+                    x++;
+                }
+            }
+            /* let toyToRemove = Math.floor(Math.random()*4) */
+            
+            console.log(removableToyMass, randomOfthree)
+           
+            /* toysContainer.getChildAt(toyToRemove).visible=false ;  */
+            /* removableToy = toyToRemove; */
+           
+          
+           for (let i = 0; i < 4; i++){ 
+            if (randomOfthree.includes(i)){continue}
             drawToys(toys[i+4], 1.00, poryadokAfterButton(i), ToyButtonContainer, true)
+            
         }
-           drawToys(toys[toyToRemove], 1.00, poryadokAfterButton(randomOfthree), ToyButtonContainer,true, true)
+        for(let i =0; i<removableToyMass.length; i++){
+            /* toysContainer.getChildAt(i).visible=false; */
+            toysContainer.getChildAt(removableToyMass[i]).visible=false;
+            drawToys(toys[removableToyMass[i]], 1.00, poryadokAfterButton(randomOfthree[i]), ToyButtonContainer,true, true)
+        }
+    
      
-        }else
+        }
+        else
         {
             containerOneForButton.visible= false;
         let toyToRemove = Math.floor(Math.random()*3)
@@ -180,25 +212,37 @@ import {DropShadowFilter} from '@pixi/filter-drop-shadow';
    }
 
 async function onToyClickedTrue(){
+    CurrentRightAnswers+=1;
 drawUtility(12, true)
-toysContainer.getChildAt(removableToy).visible=true ;
-points += 100*raund;
-TruesInARow+=1;
-if(TruesInARow ==3){
-    raund+=1;
-    TruesInARow=0;
+if(CurrentRightAnswers==counterForRightAnswers){
+    if(removableToy){
+        toysContainer.getChildAt(removableToy).visible=true ;
+    }
+    else{
+        for(let i =0; i<removableToyMass.length; i++){
+            toysContainer.getChildAt(removableToyMass[i]).visible=true ;
+        }
+    }
+    
+    points += 100*raund;
+    TruesInARow+=1;
+    if(TruesInARow ==3){
+        raund+=1;
+        TruesInARow=0;
+    }
+    setTimeout(() => {
+        
+    AnimationOnButtonDown(scene)
+    
+    }, 1200);
+    setTimeout(() => {
+        endOfthegame(end)
+        scene = 1;
+        Game()
+        
+    }, 1200);
 }
-setTimeout(() => {
-    
-AnimationOnButtonDown(scene)
 
-}, 1200);
-setTimeout(() => {
-    endOfthegame(end)
-    scene = 1;
-    Game()
-    
-}, 1200);
 
 }
 let OshibkiVIgre = 0
@@ -245,6 +289,7 @@ Game()
          bunny.eventMode = 'static'  
          bunny.cursor = 'pointer'  
          win? bunny.on('pointerdown', onToyClickedTrue) : bunny.on('pointerdown', onToyClickedFalse);
+         win? bunny.on('pointerdown', ()=>{bunny.visible=false}): ''
          bunny.on('pointerover', rotationOnHower)
          bunny.on('pointerout', stopRotationOnHover)
     }
