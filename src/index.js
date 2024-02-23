@@ -14,12 +14,11 @@ async function StartOfTheGame(){
         await PIXI.Assets.load('../spritesTWO/ToysFirst.json')
         await PIXI.Assets.load('../spritesTWO/ButtonsAndMore.json')
         await PIXI.Assets.load('../spritesTWO/Books.json')
-        /* const balls = await PIXI.Assets.load('../spritesTWO/balls/Balls.json') */
     
         const app = new PIXI.Application({background: 'blue', width:632, height:478, view: document.getElementById('MyCanvas')});
-        /* document.body.appendChild(app.view); */
+       
         const container = new PIXI.Container();
-        // Move container to the center
+       
         container.x = app.screen.width / 2;
         container.y = app.screen.height / 2;
         container.scale.set(0.8)
@@ -54,7 +53,7 @@ async function StartOfTheGame(){
        let counterForRightAnswers = 1;
        let CurrentRightAnswers = 0;
        let end = false;
-       
+       let timeValue = 61;
     
        function RandomNumberOfToys(i){
         for(let x = 0; x <i;){
@@ -157,13 +156,11 @@ async function StartOfTheGame(){
                         x++;
                     }
                 }
-                /* let toyToRemove = Math.floor(Math.random()*4) */
+               
                 
-                console.log(removableToyMass, randomOfthree, removableToy, scene)
                
-                /* toysContainer.getChildAt(toyToRemove).visible=false ;  */
-                /* removableToy = toyToRemove; */
                
+              
              if(removableToyMass&&randomOfthree) 
               { for (let i = 0; i < 4; i++){ 
                 if (randomOfthree.includes(i)){continue}
@@ -171,7 +168,7 @@ async function StartOfTheGame(){
                 
             }
             for(let i =0; i<removableToyMass.length; i++){
-                /* toysContainer.getChildAt(i).visible=false; */
+               
                 toysContainer.getChildAt(removableToyMass[i]).visible=false;
                 drawToys(toys[removableToyMass[i]], 1.00, poryadokAfterButton(randomOfthree[i]), ToyButtonContainer,true, true)
             }}
@@ -185,7 +182,6 @@ async function StartOfTheGame(){
             toysContainer.getChildAt(toyToRemove).visible=false ; 
             removableToyMass[0] = toyToRemove;
            let randomOfthree = Math.floor(Math.random()*3)
-           console.log(`random number of the toy is ${randomOfthree}`)
            for (let i =0; i < 3; i++){ 
             if (i== randomOfthree){continue}
             drawToys(toys[i+3], 1.00, poryadokAfterButton(i), ToyButtonContainer, true)
@@ -196,7 +192,6 @@ async function StartOfTheGame(){
         if(scene ==3){
             let  TextToPutOnTheEndScreen = `Congratulations!\nYour score is:${points}`
             const EndScreen = new PIXI.Container();
-            // Move EndScreen to the center
             EndScreen.x = app.screen.width / 2;
             EndScreen.y = app.screen.height / 2;
             EndScreen.scale.set(0.8)
@@ -283,7 +278,6 @@ async function StartOfTheGame(){
                 rows[j]=rows[j-1]+53
             }
         }
-       console.log(rows, columns)
     
         function interactiveToys(bunny, win){
            
@@ -322,18 +316,15 @@ async function StartOfTheGame(){
             interactive? bunny.filters = [new DropShadowFilter()] : ''
         }
         
-        
-    
         async function drawUtility(spriteNumber, win){
         const val = `3_${spriteNumber}.png`
         const texture = PIXI.Texture.from(val) 
         const bunny = new PIXI.Sprite(texture);
         bunny.anchor.set(0.5)
-        /* bunny.x = container.width/14;
-        bunny.y = container.height/2; */
+       
         bunny.x = app.screen.width/2 - 300
         bunny.y = app.screen.height/2 - 300
-        console.log(bunny.x, bunny.y)
+       
         container.addChild(bunny)
     
         win?
@@ -351,10 +342,10 @@ async function StartOfTheGame(){
             BackOnTheLeft.scale.set(0.5);
             BackOnTheLeft.x = -BackOnTheLeft.width/2 -21
             container.addChild(BackOnTheLeft);
-            console.log(BackOnTheLeft.width, BackOnTheLeft.height);
+           
     
         async function animationOnEnteringTheScene(){
-            /* container.x += BackOnTheLeft.width-315 */
+            
             container.x += 500
             drawNumbers()
             AnimationOnButtonDown(true,2400)
@@ -397,7 +388,6 @@ async function StartOfTheGame(){
        
         const bubildaRight = new PIXI.Sprite(textu)
         
-       /*  bubilda.tint = 0xf0d554 */
         bubilda.anchor.set(0.5)
         bubildaRight.anchor.set(0.5)
     
@@ -415,8 +405,6 @@ async function StartOfTheGame(){
         
        }
         function onButtonDownHide(){
-            /* toysContainer.visible=false; */
-            
             scene = 2;
             Game()
             AnimationOnButtonDown()
@@ -425,7 +413,7 @@ async function StartOfTheGame(){
             location.reload();
         }
         function onButtonOver(){
-           /*  containerOneForButton.scale.set(0.97) */
+           
         }
         function onButtonOut(){
             containerOneForButton.scale.set(1)
@@ -438,10 +426,6 @@ async function StartOfTheGame(){
         containerForBoks.width = container.width
         containerForBoks.height = container.height
         containerForBoks.anchor = 0.5
-        console.log(containerForBoks.width)
-        /* 
-        containerForBoks.scale.set(0.8)
-        containerForBoks.visible = true */
         container.addChild(containerForBoks);
        
         async function drawBooks(){
@@ -520,7 +504,7 @@ async function StartOfTheGame(){
         container.addChild(ContainerForBackgroundStuff);
     
         await PIXI.Assets.load('../spritesTWO/balls/Balls.json')
-        async function drawBalls(){    
+        /* async function drawBalls(){    
         const containerForBalls = new PIXI.Container();
         containerForBalls.anchor = (0.5)   
         container.addChild(containerForBalls)  
@@ -535,7 +519,7 @@ async function StartOfTheGame(){
         anim.x = 110
         anim.y = -260
         containerForBalls.addChild(anim) 
-        }
+        } */
     
       
     
@@ -554,7 +538,6 @@ async function StartOfTheGame(){
         const anim = new PIXI.AnimatedSprite(cadrs)
         anim.animationSpeed = 0.02
         anim.play();
-        console.log(anim.totalFrames)
         anim.x = 235
         anim.y = -155
         containerForFish.addChild(anim)
@@ -582,8 +565,7 @@ async function StartOfTheGame(){
         })
         
         }
-        drawFish();
-    //gsap.to(bunny, {height:bunny.height+15,width:bunny.width+15 , duration: 0.25, repeat: 4, yoyo:true, onComplete(){bunny.visible = false}})
+        
         async function drawNumbers(){
         const number1 = new PIXI.Sprite(PIXI.Texture.from('3_23.png'))
         const number2 = new PIXI.Sprite(PIXI.Texture.from('3_17.png'))
@@ -611,10 +593,10 @@ async function StartOfTheGame(){
     }
     
     const UIcontainer = new PIXI.Container();
-       /*  UIcontainer.pivot.set(560, 320) */
        UIcontainer.anchor = 0.5
        UIcontainer.zIndex = -1
         container.addChild(UIcontainer);
+
      async  function drawUI(TextToPut,XX,width,gap, CrossNede, circleNeed){
         const UI = new PIXI.Sprite(PIXI.Texture.WHITE)
         UI.width=width;
@@ -633,45 +615,39 @@ async function StartOfTheGame(){
            text.x =  UI.x-UI.width/2-40
             
         }
-       
-        if(CrossNede){
-            for(let x=0; x<3-OshibkiVIgre; x++){
-                const cross = new PIXI.Sprite(PIXI.Texture.from('./Crosses/WhiteCross.png') )
+       function drawCross(x,path,a){
+        const cross = new PIXI.Sprite(PIXI.Texture.from(path) )
                 cross.angle = 45
                 cross.width = 25
                 cross.height = 25
-                cross.x = UI.x-UI.width/2 +25 - 25*x;
+                a?cross.x = UI.x-UI.width/2 -25 + 25*x:cross.x = UI.x-UI.width/2 +25 - 25*x;
                 cross.y = UI.y-UI.height/2-17;
                 UIcontainer.addChild(cross)
+       }
+       function drawCircle(x, path, a){
+        const WhiteCircle = new PIXI.Sprite(PIXI.Texture.from(path) )
+        WhiteCircle.width = 20
+        WhiteCircle.height = 20
+       a?WhiteCircle.x = UI.x-UI.width/2 -10 + 25*x: WhiteCircle.x = UI.x-UI.width/2 +40 - 25*x;
+        WhiteCircle.y = UI.y-UI.height/2-10;
+        UIcontainer.addChild(WhiteCircle)
+       }
+        if(CrossNede){
+            for(let x=0; x<3-OshibkiVIgre; x++){
+               drawCross(x,'./Crosses/WhiteCross.png');
             }
             for(let x=0; x<OshibkiVIgre&& x<3; x++){
-                const Redcross = new PIXI.Sprite(PIXI.Texture.from('./Crosses/RedCross.png') )
-            Redcross.angle = 45
-                Redcross.width = 25
-                Redcross.height = 25
-                Redcross.x = UI.x-UI.width/2 -25 + 25*x;
-                Redcross.y = UI.y-UI.height/2 -17;
-                UIcontainer.addChild(Redcross)
+                drawCross(x, './Crosses/RedCross.png', true)
             }
             
             
         }
         if(circleNeed){
             for(let x=0; x<3-TruesInARow; x++){
-                const WhiteCircle = new PIXI.Sprite(PIXI.Texture.from('./Circles/YellowCircle.png') )
-                WhiteCircle.width = 20
-                WhiteCircle.height = 20
-                WhiteCircle.x = UI.x-UI.width/2 +40 - 25*x;
-                WhiteCircle.y = UI.y-UI.height/2-10;
-                UIcontainer.addChild(WhiteCircle)
+               drawCircle(x,'./Circles/YellowCircle.png')
             }
             for(let x=0; x<TruesInARow && x<3; x++){
-                const YellowCircle = new PIXI.Sprite(PIXI.Texture.from('./Circles/WhiteCircle.png') )
-                YellowCircle.width = 20
-                YellowCircle.height = 20
-                YellowCircle.x = UI.x-UI.width/2 -10 + 25*x;
-                YellowCircle.y = UI.y-UI.height/2 -10;
-                UIcontainer.addChild(YellowCircle)
+               drawCircle(x, './Circles/WhiteCircle.png',true)
             }
             
             
@@ -679,13 +655,10 @@ async function StartOfTheGame(){
     
         
     }  
-    
-   
     setTimeout(() => {
     uiDrwaer()
     }, 3900);
-    let timeValue = 61;
-  
+
     async function uiDrwaer(){
     
         let timeInterval = setInterval(() => {
@@ -723,6 +696,7 @@ async function StartOfTheGame(){
     containerForArrow.y = container.y
     container.addChild(containerForArrow)
     arrowAnimation();
+
     function arrowAnimation(){
         const arrow = new PIXI.Sprite(PIXI.Texture.from('./spritesTWO/arrow.png')  )
         arrow.anchor.set(0.5)
@@ -752,16 +726,10 @@ async function StartOfTheGame(){
         const rightLamp = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_03.png')  )
         const paintingInShadow = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_92.png')  )
         const downFlower = new PIXI.Sprite(PIXI.Texture.from('./sprites/2_141.png')  )
-      /*   const arrow = new PIXI.Sprite(PIXI.Texture.from('./spritesTWO/arrow.png')  ) */
+
         paintingInShadow.tint = 0xadacac;
         catToLeft.tint = 0xadacac;
         catToRight.tint = 0xadacac; 
-        /* arrow.tint = 0x478fcc
-        arrow.anchor.set(0.5)
-        arrow.scale.set(0.6) */
-        /* setPlace(arrow, -34, -445)
-        arrow.visible=true
-        gsap.to(arrow, {rotation: 2*3.14, duration: 60, ease:'steps(36)',repeat:-1,yoyo:false}) */
         function setPlace(name,X,Y){
             name.x= X;
             name.y= Y;
@@ -805,24 +773,16 @@ async function StartOfTheGame(){
             containerForArrow.tint=0x478fcc
         }
         
-    }
-    
-    BackgroundStuff(1);
+    } 
     function endOfthegame(end){
         OshibkiVIgre ==4? scene=3:''
-        end?scene=3:console.log(end)
+        end?scene=3:''
         Game()
     }
-     
        Game();
-       
-       /*   drawBalls();     */
+       BackgroundStuff(1);
        animationOnEnteringTheScene();
-       
-       
-    
-    
-    
+       drawFish();
 }
 
 StartOfTheGame();
