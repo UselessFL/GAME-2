@@ -1,12 +1,12 @@
 {
   "name": "game-2",
   "version": "1.0.0",
-  "description": "",
+  "description": "denis1231123@mail.ru",
   "main": "index.js",
   "scripts": {
     "dev": "vite"
   },
-  "author": "",
+  "author": "Denis Baranovsky",
   "license": "ISC",
   "dependencies": {
     "@pixi/filter-drop-shadow": "^5.2.0",
